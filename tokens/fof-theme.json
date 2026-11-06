@@ -1,0 +1,470 @@
+{
+  "$description": "Variabili Figma del corso fof-milano. Stessi nomi di app/globals.css. Controllo: node scripts/fof-tokens.mjs",
+  "collections": [
+    {
+      "name": "primitives",
+      "hiddenFromPublishing": true,
+      "modes": [
+        "Value"
+      ],
+      "variables": [
+        {
+          "name": "white",
+          "type": "COLOR",
+          "values": {
+            "Value": "#FFFFFF"
+          },
+          "scopes": []
+        },
+        {
+          "name": "gray/50",
+          "type": "COLOR",
+          "values": {
+            "Value": "#F5F5F5"
+          },
+          "scopes": []
+        },
+        {
+          "name": "gray/200",
+          "type": "COLOR",
+          "values": {
+            "Value": "#E2E4EC"
+          },
+          "scopes": []
+        },
+        {
+          "name": "gray/500",
+          "type": "COLOR",
+          "values": {
+            "Value": "#7E849C"
+          },
+          "scopes": []
+        },
+        {
+          "name": "gray/600",
+          "type": "COLOR",
+          "values": {
+            "Value": "#565B6E"
+          },
+          "scopes": []
+        },
+        {
+          "name": "gray/950",
+          "type": "COLOR",
+          "values": {
+            "Value": "#111111"
+          },
+          "scopes": []
+        },
+        {
+          "name": "navy/100",
+          "type": "COLOR",
+          "values": {
+            "Value": "#C4CCE8"
+          },
+          "scopes": []
+        },
+        {
+          "name": "navy/600",
+          "type": "COLOR",
+          "values": {
+            "Value": "#34509A"
+          },
+          "scopes": []
+        },
+        {
+          "name": "navy/700",
+          "type": "COLOR",
+          "values": {
+            "Value": "#213C88"
+          },
+          "scopes": []
+        },
+        {
+          "name": "navy/800",
+          "type": "COLOR",
+          "values": {
+            "Value": "#142F78"
+          },
+          "scopes": []
+        },
+        {
+          "name": "navy/900",
+          "type": "COLOR",
+          "values": {
+            "Value": "#0F2462"
+          },
+          "scopes": []
+        },
+        {
+          "name": "lime/300",
+          "type": "COLOR",
+          "values": {
+            "Value": "#E2FD94"
+          },
+          "scopes": []
+        },
+        {
+          "name": "lilac/300",
+          "type": "COLOR",
+          "values": {
+            "Value": "#C99BD0"
+          },
+          "scopes": []
+        },
+        {
+          "name": "pink/400",
+          "type": "COLOR",
+          "values": {
+            "Value": "#FF5FC8"
+          },
+          "scopes": []
+        },
+        {
+          "name": "pink/700",
+          "type": "COLOR",
+          "values": {
+            "Value": "#B0107F"
+          },
+          "scopes": []
+        },
+        {
+          "name": "red/300",
+          "type": "COLOR",
+          "values": {
+            "Value": "#FF8A80"
+          },
+          "scopes": []
+        },
+        {
+          "name": "red/700",
+          "type": "COLOR",
+          "values": {
+            "Value": "#B42318"
+          },
+          "scopes": []
+        }
+      ]
+    },
+    {
+      "name": "theme",
+      "modes": [
+        "Light",
+        "Dark"
+      ],
+      "variables": [
+        {
+          "name": "background",
+          "type": "COLOR",
+          "values": {
+            "Light": "{primitives.white}",
+            "Dark": "{primitives.navy/800}"
+          },
+          "scopes": [
+            "FRAME_FILL",
+            "SHAPE_FILL"
+          ],
+          "codeSyntax": {
+            "WEB": "var(--background)"
+          }
+        },
+        {
+          "name": "foreground",
+          "type": "COLOR",
+          "values": {
+            "Light": "{primitives.gray/950}",
+            "Dark": "{primitives.gray/50}"
+          },
+          "scopes": [
+            "TEXT_FILL"
+          ],
+          "codeSyntax": {
+            "WEB": "var(--foreground)"
+          }
+        },
+        {
+          "name": "card",
+          "type": "COLOR",
+          "values": {
+            "Light": "{primitives.white}",
+            "Dark": "{primitives.navy/900}"
+          },
+          "scopes": [
+            "FRAME_FILL",
+            "SHAPE_FILL"
+          ],
+          "codeSyntax": {
+            "WEB": "var(--card)"
+          }
+        },
+        {
+          "name": "card-foreground",
+          "type": "COLOR",
+          "values": {
+            "Light": "{primitives.gray/950}",
+            "Dark": "{primitives.gray/50}"
+          },
+          "scopes": [
+            "TEXT_FILL"
+          ],
+          "codeSyntax": {
+            "WEB": "var(--card-foreground)"
+          }
+        },
+        {
+          "name": "popover",
+          "type": "COLOR",
+          "values": {
+            "Light": "{primitives.white}",
+            "Dark": "{primitives.navy/900}"
+          },
+          "scopes": [
+            "FRAME_FILL",
+            "SHAPE_FILL"
+          ],
+          "codeSyntax": {
+            "WEB": "var(--popover)"
+          }
+        },
+        {
+          "name": "popover-foreground",
+          "type": "COLOR",
+          "values": {
+            "Light": "{primitives.gray/950}",
+            "Dark": "{primitives.gray/50}"
+          },
+          "scopes": [
+            "TEXT_FILL"
+          ],
+          "codeSyntax": {
+            "WEB": "var(--popover-foreground)"
+          }
+        },
+        {
+          "name": "primary",
+          "type": "COLOR",
+          "values": {
+            "Light": "{primitives.navy/800}",
+            "Dark": "{primitives.lime/300}"
+          },
+          "scopes": [
+            "FRAME_FILL",
+            "SHAPE_FILL"
+          ],
+          "codeSyntax": {
+            "WEB": "var(--primary)"
+          }
+        },
+        {
+          "name": "primary-foreground",
+          "type": "COLOR",
+          "values": {
+            "Light": "{primitives.lime/300}",
+            "Dark": "{primitives.navy/800}"
+          },
+          "scopes": [
+            "TEXT_FILL",
+            "SHAPE_FILL"
+          ],
+          "codeSyntax": {
+            "WEB": "var(--primary-foreground)"
+          }
+        },
+        {
+          "name": "secondary",
+          "type": "COLOR",
+          "values": {
+            "Light": "{primitives.lilac/300}",
+            "Dark": "{primitives.lilac/300}"
+          },
+          "scopes": [
+            "FRAME_FILL",
+            "SHAPE_FILL"
+          ],
+          "codeSyntax": {
+            "WEB": "var(--secondary)"
+          }
+        },
+        {
+          "name": "secondary-foreground",
+          "type": "COLOR",
+          "values": {
+            "Light": "{primitives.navy/800}",
+            "Dark": "{primitives.navy/800}"
+          },
+          "scopes": [
+            "TEXT_FILL",
+            "SHAPE_FILL"
+          ],
+          "codeSyntax": {
+            "WEB": "var(--secondary-foreground)"
+          }
+        },
+        {
+          "name": "muted",
+          "type": "COLOR",
+          "values": {
+            "Light": "{primitives.gray/50}",
+            "Dark": "{primitives.navy/700}"
+          },
+          "scopes": [
+            "FRAME_FILL",
+            "SHAPE_FILL"
+          ],
+          "codeSyntax": {
+            "WEB": "var(--muted)"
+          }
+        },
+        {
+          "name": "muted-foreground",
+          "type": "COLOR",
+          "values": {
+            "Light": "{primitives.gray/600}",
+            "Dark": "{primitives.navy/100}"
+          },
+          "scopes": [
+            "TEXT_FILL",
+            "SHAPE_FILL"
+          ],
+          "codeSyntax": {
+            "WEB": "var(--muted-foreground)"
+          }
+        },
+        {
+          "name": "accent",
+          "type": "COLOR",
+          "values": {
+            "Light": "{primitives.lime/300}",
+            "Dark": "{primitives.pink/400}"
+          },
+          "scopes": [
+            "FRAME_FILL",
+            "SHAPE_FILL"
+          ],
+          "codeSyntax": {
+            "WEB": "var(--accent)"
+          }
+        },
+        {
+          "name": "accent-foreground",
+          "type": "COLOR",
+          "values": {
+            "Light": "{primitives.navy/800}",
+            "Dark": "{primitives.gray/950}"
+          },
+          "scopes": [
+            "TEXT_FILL",
+            "SHAPE_FILL"
+          ],
+          "codeSyntax": {
+            "WEB": "var(--accent-foreground)"
+          }
+        },
+        {
+          "name": "destructive",
+          "type": "COLOR",
+          "values": {
+            "Light": "{primitives.red/700}",
+            "Dark": "{primitives.red/300}"
+          },
+          "scopes": [
+            "FRAME_FILL",
+            "SHAPE_FILL",
+            "TEXT_FILL",
+            "STROKE_COLOR"
+          ],
+          "codeSyntax": {
+            "WEB": "var(--destructive)"
+          }
+        },
+        {
+          "name": "destructive-foreground",
+          "type": "COLOR",
+          "values": {
+            "Light": "{primitives.white}",
+            "Dark": "{primitives.navy/800}"
+          },
+          "scopes": [
+            "TEXT_FILL",
+            "SHAPE_FILL"
+          ],
+          "codeSyntax": {
+            "WEB": "var(--destructive-foreground)"
+          }
+        },
+        {
+          "name": "link",
+          "type": "COLOR",
+          "values": {
+            "Light": "{primitives.pink/700}",
+            "Dark": "{primitives.pink/400}"
+          },
+          "scopes": [
+            "TEXT_FILL"
+          ],
+          "codeSyntax": {
+            "WEB": "var(--link)"
+          }
+        },
+        {
+          "name": "border",
+          "type": "COLOR",
+          "values": {
+            "Light": "{primitives.gray/200}",
+            "Dark": "{primitives.navy/600}"
+          },
+          "scopes": [
+            "STROKE_COLOR"
+          ],
+          "codeSyntax": {
+            "WEB": "var(--border)"
+          }
+        },
+        {
+          "name": "input",
+          "type": "COLOR",
+          "values": {
+            "Light": "{primitives.gray/500}",
+            "Dark": "{primitives.lilac/300}"
+          },
+          "scopes": [
+            "STROKE_COLOR",
+            "FRAME_FILL"
+          ],
+          "codeSyntax": {
+            "WEB": "var(--input)"
+          }
+        },
+        {
+          "name": "ring",
+          "type": "COLOR",
+          "values": {
+            "Light": "{primitives.navy/800}",
+            "Dark": "{primitives.pink/400}"
+          },
+          "scopes": [
+            "STROKE_COLOR",
+            "EFFECT_COLOR"
+          ],
+          "codeSyntax": {
+            "WEB": "var(--ring)"
+          }
+        },
+        {
+          "name": "radius",
+          "type": "FLOAT",
+          "values": {
+            "Light": 10,
+            "Dark": 10
+          },
+          "scopes": [
+            "CORNER_RADIUS"
+          ],
+          "codeSyntax": {
+            "WEB": "var(--radius)"
+          }
+        }
+      ]
+    }
+  ]
+}

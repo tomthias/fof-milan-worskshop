@@ -1,0 +1,9 @@
+---
+description: Regole del workshop fof-milano
+alwaysApply: true
+---
+
+Prima di qualsiasi lavoro in questa repo, leggi e segui `AGENTS.md` alla radice.
+In breve: la spec in `docs/specs/` è l'unica fonte di verità, non inventare props o varianti,
+riporta le differenze codice ↔ Figma invece di scegliere, chiedi conferma prima di scrivere in Figma,
+usa solo le variabili del tema.

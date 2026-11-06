@@ -1,0 +1,198 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "fof-milano/component-spec",
+  "title": "Spec di un componente — fof-milano",
+  "description": "Unica fonte di verità per la documentazione di un componente. Il frame Figma si costruisce da qui. Per correggere la doc si corregge la spec e si rigenera.",
+  "type": "object",
+  "required": ["name", "slug", "description", "sections", "source", "variants", "mismatches", "provenance"],
+  "properties": {
+    "name": { "type": "string", "description": "Nome visualizzato. Es. 'Button'" },
+    "slug": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$", "description": "Nome del file in components/ui, senza estensione" },
+    "description": { "type": "string", "maxLength": 280, "description": "Al massimo 2 frasi, in italiano" },
+
+    "sections": {
+      "type": "array",
+      "description": "Le sezioni scelte dal menu, nell'ordine in cui compaiono nel frame. overview, variants e mismatches sono obbligatorie.",
+      "items": { "enum": ["overview", "variants", "mismatches", "anatomy", "states", "usage", "tokens", "a11y", "spacing", "content", "context"] },
+      "uniqueItems": true
+    },
+
+    "source": {
+      "type": "object",
+      "required": ["code"],
+      "properties": {
+        "code": { "type": "string", "description": "Es. 'components/ui/button.tsx'" },
+        "figma": {
+          "type": "object",
+          "properties": {
+            "fileKey": { "type": "string" },
+            "nodeId": { "type": "string", "description": "Id del component set (o del componente)" },
+            "name": { "type": "string" }
+          }
+        }
+      }
+    },
+
+    "props": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "type"],
+        "properties": {
+          "name": { "type": "string" },
+          "type": { "type": "string" },
+          "default": {},
+          "description": { "type": "string", "maxLength": 140 },
+          "in": { "type": "array", "items": { "enum": ["code", "figma"] }, "description": "Dove esiste la prop" }
+        }
+      }
+    },
+
+    "variants": {
+      "type": "object",
+      "required": ["code"],
+      "description": "Varianti lette dalle due parti. code = cva nel sorgente, figma = variant properties del component set.",
+      "properties": {
+        "code": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } },
+        "figma": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } },
+        "defaults": { "type": "object", "additionalProperties": { "type": "string" } }
+      }
+    },
+
+    "mismatches": {
+      "type": "array",
+      "description": "Differenze tra codice e Figma. Non si risolvono scegliendo: si riportano. Array vuoto se non ce ne sono.",
+      "items": {
+        "type": "object",
+        "required": ["what", "code", "figma"],
+        "properties": {
+          "what": { "type": "string" },
+          "code": { "type": "string" },
+          "figma": { "type": "string" },
+          "severity": { "enum": ["info", "warning"] }
+        }
+      }
+    },
+
+    "anatomy": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["n", "part"],
+        "properties": {
+          "n": { "type": "integer" },
+          "part": { "type": "string" },
+          "layer": { "type": "string", "description": "Nome del layer in Figma dove mettere il marker" },
+          "slot": { "type": "string", "description": "data-slot nel codice, se c'è" },
+          "description": { "type": "string" },
+          "optional": { "type": "boolean" }
+        }
+      }
+    },
+
+    "states": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["state"],
+        "properties": {
+          "state": { "enum": ["default", "hover", "focus-visible", "active", "disabled", "invalid", "checked", "unchecked"] },
+          "code": { "type": "string", "description": "Come lo fa il codice. Es. 'disabled:opacity-50'" },
+          "figma": { "type": ["string", "null"], "description": "Variante Figma che lo mostra, o null se non c'è" },
+          "note": { "type": "string" }
+        }
+      }
+    },
+
+    "usage": {
+      "type": "array",
+      "description": "Do & Don't. Nel frame finiscono solo quelli con approved: true.",
+      "items": {
+        "type": "object",
+        "required": ["type", "rule", "source", "approved"],
+        "properties": {
+          "type": { "enum": ["do", "dont"] },
+          "rule": { "type": "string", "maxLength": 160 },
+          "mode": { "enum": ["generated", "selection"], "description": "generated = scena creata dall'agente · selection = esempio composto a mano in Figma" },
+          "scene": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["component"],
+              "properties": {
+                "component": { "type": "string", "description": "slug del componente" },
+                "props": { "type": "object" },
+                "text": { "type": "string" }
+              }
+            }
+          },
+          "selectionId": { "type": "string", "description": "Solo con mode: selection" },
+          "source": { "enum": ["codice", "shadcn-registry", "figma", "inferenza", "designer"] },
+          "approved": { "type": "boolean" }
+        }
+      }
+    },
+
+    "tokens": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["part", "property", "variable"],
+        "properties": {
+          "part": { "type": "string" },
+          "variant": { "type": "string", "description": "Es. 'variant=default'. Vuoto se vale per tutte" },
+          "property": { "enum": ["fill", "text", "stroke", "ring"] },
+          "variable": { "type": "string", "description": "Nome della variabile, uguale in Figma e in globals.css" }
+        }
+      }
+    },
+
+    "a11y": {
+      "type": "object",
+      "properties": {
+        "contrast": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["pair", "mode", "ratio", "min", "pass"],
+            "properties": {
+              "pair": { "type": "string", "description": "'testo / sfondo', es. 'primary-foreground / primary'" },
+              "mode": { "enum": ["Light", "Dark"] },
+              "ratio": { "type": "number" },
+              "min": { "type": "number" },
+              "pass": { "type": "boolean" }
+            }
+          }
+        },
+        "role": { "type": "string" },
+        "keyboard": { "type": "array", "items": { "type": "string" } },
+        "targetSize": { "type": "string" },
+        "notes": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+
+    "spacing": { "type": "object", "description": "Sezione libera: la si progetta nel Lab 3" },
+    "content": { "type": "object", "description": "Sezione libera: la si progetta nel Lab 3" },
+    "context": { "type": "object", "description": "Sezione libera: la si progetta nel Lab 3" },
+
+    "figmaDoc": {
+      "type": "object",
+      "description": "Scritto da /fof-figma-doc. Non toccare a mano.",
+      "properties": {
+        "frameId": { "type": "string" },
+        "sections": { "type": "object", "additionalProperties": { "type": "string" } },
+        "builtAt": { "type": "string" }
+      }
+    },
+
+    "provenance": {
+      "type": "object",
+      "required": ["sources", "date", "verified"],
+      "properties": {
+        "sources": { "type": "array", "items": { "enum": ["codice", "globals.css", "shadcn-registry", "figma", "inferenza", "designer"] } },
+        "date": { "type": "string" },
+        "verified": { "type": "boolean", "description": "true solo dopo la revisione di una persona" }
+      }
+    }
+  }
+}
