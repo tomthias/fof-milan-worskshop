@@ -26,7 +26,7 @@ picker: i componenti non la usano mai direttamente.
 | `pink/400` | `#FF5FC8` | |
 | `pink/700` | `#B0107F` | rosa scuro, per il testo su chiaro |
 | `gray/50` · `gray/950` | `#F5F5F5` · `#111111` | |
-| … | | navy 100–900, gray, red: vedi `tokens/fof-theme.json` |
+| … | | navy 100–900, gray, red: vedi `tokens/tokens.json` |
 
 **`theme`** — le variabili che si usano davvero, con due modi: **Light** e **Dark**.
 Ognuna è un alias di una primitiva.
@@ -74,5 +74,5 @@ Perché: su bianco il lime fa 1,1:1, il rosa 2,7:1, il lilla 2,3:1. Su navy inve
 node scripts/fof-tokens.mjs
 ```
 
-Controlla che `globals.css` e `tokens/fof-theme.json` abbiano gli stessi nomi e gli stessi
+Controlla che `globals.css` e `tokens/tokens.json` abbiano gli stessi nomi e gli stessi
 valori, e calcola il contrasto delle coppie che si usano insieme.

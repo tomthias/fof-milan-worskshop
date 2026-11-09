@@ -13,6 +13,11 @@
   `data-[state=checked]:`.
 - **Colori**: classi `bg-<nome>`, `text-<nome>`, `border-<nome>`, `ring-<nome>`. `<nome>` è la
   variabile. `bg-primary/90` vuol dire primary al 90% di opacità: la variabile resta `primary`.
+- **Snippet** (sezione `code`): l'import viene dalle funzioni esportate (`export { Button, … }`)
+  con il percorso `@/components/ui/<slug>`. Negli esempi usa solo props e valori che esistono
+  davvero nel file (le chiavi di `cva`, `asChild`, gli attributi HTML elencati sopra). Niente
+  librerie che il progetto non ha: se `package.json` non contiene `lucide-react`, niente icone
+  importate da lì. Uno snippet per idea (uso base, varianti, composizione), poche righe ciascuno.
 
 ## Registry shadcn (MCP `shadcn`)
 

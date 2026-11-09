@@ -2,13 +2,13 @@
   "name": "Button",
   "slug": "button",
   "description": "Avvia un'azione: inviare un form, aprire un dialog, confermare una scelta. Usa la variante per dire quanto pesa l'azione, non per decorare.",
-  "sections": ["overview", "variants", "mismatches", "anatomy", "states", "usage", "tokens", "a11y"],
+  "sections": ["overview", "variants", "mismatches", "anatomy", "states", "usage", "tokens", "a11y", "code"],
 
   "source": {
     "code": "components/ui/button.tsx",
     "figma": {
-      "fileKey": "DA-COMPILARE",
-      "nodeId": "DA-COMPILARE",
+      "fileKey": "bDIlvCt3yrApyG1qcxHc7B",
+      "nodeId": "2:331",
       "name": "Button"
     }
   },
@@ -136,9 +136,22 @@
     ]
   },
 
+  "code": [
+    { "title": "Uso base", "lang": "tsx", "snippet": "import { Button } from \"@/components/ui/button\"\n\nexport function Salva() {\n  return <Button>Salva</Button>\n}" },
+    { "title": "Varianti e dimensioni", "lang": "tsx", "snippet": "<Button variant=\"outline\">Annulla</Button>\n<Button variant=\"destructive\">Elimina progetto</Button>\n<Button variant=\"ghost\" size=\"sm\">Altro</Button>\n<Button size=\"lg\">Continua</Button>" },
+    { "title": "Come link", "lang": "tsx", "snippet": "// asChild: lo stile va al figlio, che resta un <a>\n<Button asChild variant=\"link\">\n  <a href=\"/accedi\">Accedi</a>\n</Button>" },
+    { "title": "Disabilitato", "lang": "tsx", "snippet": "<Button disabled>Invio in corso…</Button>" }
+  ],
+
   "provenance": {
     "sources": ["codice", "globals.css", "shadcn-registry", "figma", "inferenza"],
     "date": "2026-11-01",
     "verified": true
+  },
+
+  "figmaDoc": {
+    "frameId": "3:6",
+    "sections": { "overview": "3:667", "variants": "3:696", "mismatches": "3:765", "anatomy": "3:793", "states": "3:829", "usage": "3:865", "tokens": "3:1277", "a11y": "3:1032", "code": "3:1228" },
+    "builtAt": "2026-11-06"
   }
 }

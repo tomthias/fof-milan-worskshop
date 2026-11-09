@@ -2,40 +2,93 @@
   "name": "Badge",
   "slug": "badge",
   "description": "Etichetta breve che dà uno stato o una categoria a un elemento. Non è cliccabile, a meno che non avvolga un link.",
-  "sections": ["overview", "variants", "mismatches"],
-
+  "sections": [
+    "overview",
+    "variants",
+    "mismatches"
+  ],
   "source": {
     "code": "components/ui/badge.tsx",
     "figma": {
-      "fileKey": "DA-COMPILARE",
-      "nodeId": "DA-COMPILARE",
+      "fileKey": "bDIlvCt3yrApyG1qcxHc7B",
+      "nodeId": "2:344",
       "name": "Badge"
     }
   },
-
   "props": [
-    { "name": "variant", "type": "\"default\" | \"secondary\" | \"destructive\" | \"outline\"", "default": "default", "description": "Colore e peso dell'etichetta.", "in": ["code", "figma"] },
-    { "name": "asChild", "type": "boolean", "default": false, "description": "Applica lo stile al figlio, per esempio un link.", "in": ["code"] },
-    { "name": "label", "type": "text", "description": "Testo dell'etichetta.", "in": ["figma"] }
+    {
+      "name": "variant",
+      "type": "\"default\" | \"secondary\" | \"destructive\" | \"outline\"",
+      "default": "default",
+      "description": "Colore e peso dell'etichetta.",
+      "in": [
+        "code",
+        "figma"
+      ]
+    },
+    {
+      "name": "asChild",
+      "type": "boolean",
+      "default": false,
+      "description": "Applica lo stile al figlio, per esempio un link.",
+      "in": [
+        "code"
+      ]
+    },
+    {
+      "name": "label",
+      "type": "text",
+      "description": "Testo dell'etichetta.",
+      "in": [
+        "figma"
+      ]
+    }
   ],
-
   "variants": {
     "code": {
-      "variant": ["default", "secondary", "destructive", "outline"]
+      "variant": [
+        "default",
+        "secondary",
+        "destructive",
+        "outline"
+      ]
     },
     "figma": {
-      "variant": ["default", "secondary", "destructive", "outline", "success"]
+      "variant": [
+        "default",
+        "secondary",
+        "destructive",
+        "outline",
+        "success"
+      ]
     },
-    "defaults": { "variant": "default" }
+    "defaults": {
+      "variant": "default"
+    }
   },
-
   "mismatches": [
-    { "what": "variant=success", "code": "non esiste: nel tema non c'è un colore success", "figma": "variante presente, con un verde non collegato a variabili", "severity": "warning" }
+    {
+      "what": "variant=success",
+      "code": "non esiste: nel tema non c'è un colore success",
+      "figma": "variante presente, con un verde non collegato a variabili",
+      "severity": "warning"
+    }
   ],
-
   "provenance": {
-    "sources": ["codice", "figma"],
+    "sources": [
+      "codice",
+      "figma"
+    ],
     "date": "2026-11-01",
     "verified": true
+  },
+  "figmaDoc": {
+    "frameId": "17:89",
+    "sections": {
+      "overview": "17:90",
+      "variants": "17:109",
+      "mismatches": "17:138"
+    },
+    "builtAt": "2026-11-09"
   }
 }

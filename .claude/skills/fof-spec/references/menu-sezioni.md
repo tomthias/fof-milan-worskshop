@@ -13,6 +13,7 @@ scelte, nell'ordine in cui sono scritte in `sections`.
 | `usage` | Do & Don't | card verdi e rosse con una scena di instance e la regola | vedi `do-dont.md` | `usage` |
 | `tokens` | Colori e variabili | tabella parte → variabile → valore Light e Dark, con campione | classi colore + variabili collegate in Figma | `tokens` |
 | `a11y` | Accessibilità | contrasti con esito AA, ruolo, tastiera, area cliccabile, note | `fof-tokens.mjs`, Radix, misure | `a11y` |
+| `code` | Codice | blocchi di codice in stile editor (barra con titolo e linguaggio, numeri di riga, colori della sintassi) | il sorgente del componente: export, props e valori di `cva` | `code` |
 | `spacing` | Spaziature | *(da costruire nel Lab 3)* | auto layout Figma, classi `p-` `gap-` | `spacing` |
 | `content` | Contenuti | *(da costruire nel Lab 3)* | inferenza, da approvare | `content` |
 | `context` | Esempio in contesto | *(da costruire nel Lab 3)* | più componenti insieme | `context` |
@@ -26,3 +27,4 @@ scelte, nell'ordine in cui sono scritte in `sections`.
 - Componente interattivo (Button, Switch, Input) → `states` e `a11y`.
 - Componente che si usa spesso male (Button, Badge) → `usage`.
 - Componente con molti colori (Button, Badge, Alert) → `tokens`.
+- Componente che si usa in codice in modi diversi (Button con `asChild`, Card composta) → `code`.

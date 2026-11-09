@@ -41,7 +41,12 @@ return await fofBuild(<spec JSON completa>, "<sezione>");
 
 - Una sezione per chiamata. Se una fallisce, rifai solo quella: il builder ricostruisce la
   sezione al suo posto senza duplicati.
+- Il builder non lancia errori: se qualcosa va storto risponde `{ ok: false, error, notes }` e lascia
+  il file com'era (la versione precedente della sezione resta, i nodi a metà vengono tolti).
+  Riporta `error` con parole semplici, correggi la causa (di solito nella spec) e rilancia solo quella
+  sezione. Non provare a riparare a mano in Figma.
 - Leggi sempre `notes` nel risultato e riportale (layer non trovati, varianti mancanti, regole saltate).
+- Gli id delle sezioni cambiano a ogni ricostruzione: aggiorna `figmaDoc` con quelli dell'ultimo giro.
 - Le sezioni `spacing`, `content`, `context` non hanno ancora un builder: se sono nella spec,
   saltale e di' che sono il compito del Lab 3.
 
@@ -70,4 +75,4 @@ return await fofBuild(<spec JSON completa>, "<sezione>");
   se qualcuno guarda le statistiche della libreria.
 - **Gli id scadono.** Se un componente viene ricreato o spostato in un altro file, il `nodeId` nella
   spec non vale più: il builder cerca allora il componente per nome e lo scrive nelle note.
-- **Font mancante.** Se Inter Tight non c'è, il builder usa Inter e lo segnala.
+- **Font.** Il builder usa Inter, che è incluso in Figma: non serve installare niente. Per gli snippet cerca un monospace (JetBrains Mono, Roboto Mono…) e se non lo trova usa Inter, segnalandolo.

@@ -31,7 +31,7 @@ Leggi `docs/specs/<slug>.json` e `components/ui/<slug>.tsx`, poi verifica, in or
 
 ## Controllo del tema (al posto di fof-tokens)
 
-Leggi `app/globals.css` (`:root` = Light, `.dark` = Dark) e `tokens/fof-theme.json`
+Leggi `app/globals.css` (`:root` = Light, `.dark` = Dark) e `tokens/tokens.json`
 (collection `theme`, alias risolti su `primitives`). Verifica:
 1. stessi nomi da tutte e due le parti (esclusa `radius`);
 2. stesso valore esadecimale per ogni modo.

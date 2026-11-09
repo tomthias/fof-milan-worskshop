@@ -5,7 +5,7 @@
 //   node scripts/fof-tokens.mjs --json     output per l'agente
 //
 // Legge:  app/globals.css     (:root = Light, .dark = Dark)
-//         tokens/fof-theme.json (collection "theme" di Figma, alias risolti su "primitives")
+//         tokens/tokens.json  (sintassi Luckino: collection "theme", alias risolti su "primitives")
 // Controlla:
 //   1. stessi nomi da tutte e due le parti
 //   2. stesso valore per ogni modo
@@ -34,19 +34,20 @@ function readCss() {
 
 // ---------------------------------------------------------------- lettura Figma
 function readFigma() {
-  const data = JSON.parse(readFileSync(join(ROOT, 'tokens/fof-theme.json'), 'utf8'));
-  const prim = data.collections.find((c) => c.name === 'primitives');
-  const theme = data.collections.find((c) => c.name === 'theme');
-  const pmap = Object.fromEntries(prim.variables.map((v) => [v.name, v.values.Value]));
+  const data = JSON.parse(readFileSync(join(ROOT, 'tokens/tokens.json'), 'utf8'));
+  // token = oggetto con $value; i nodi intermedi sono gruppi; le chiavi con $ sono metadati
+  const flat = (node, path = []) => Object.entries(node).flatMap(([k, v]) =>
+    k.startsWith('$') ? [] : v && '$value' in v ? [[[...path, k].join('.'), v]] : flat(v, [...path, k]));
+  const pmap = Object.fromEntries(flat(data.primitives).map(([n, t]) => [n, t.$value]));
   const out = { Light: {}, Dark: {} };
-  for (const v of theme.variables) {
-    if (v.type !== 'COLOR') continue;
+  for (const [name, t] of flat(data.theme)) {
+    if (t.$type !== 'color') continue;
     for (const mode of ['Light', 'Dark']) {
-      let val = v.values[mode];
+      let val = t.$value[mode];
       const alias = /^\{primitives\.(.+)\}$/.exec(val);
       if (alias) val = pmap[alias[1]];
-      if (!val) throw new Error(`Alias non risolto: ${v.name} (${mode}) → ${v.values[mode]}`);
-      out[mode][v.name] = val.toLowerCase();
+      if (!val) throw new Error(`Alias non risolto: ${name} (${mode}) → ${t.$value[mode]}`);
+      out[mode][name] = val.toLowerCase();
     }
   }
   return out;

@@ -21,7 +21,7 @@ fof-milano/
 │
 ├── components/ui/         ← 6 componenti shadcn: button, badge, input, switch, card, alert
 ├── app/globals.css        ← il tema in codice (variabili Light e Dark)
-├── tokens/fof-theme.json  ← lo stesso tema come variabili Figma
+├── tokens/tokens.json  ← lo stesso tema come variabili Figma
 │
 ├── docs/
 │   ├── VARIABILI.md       ← come funziona il tema, in Figma e in codice

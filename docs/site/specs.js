@@ -1,5 +1,5 @@
-// Generato da scripts/fof-site.mjs il 31 ottobre 2026. Non modificare a mano.
-window.FOF_GENERATED = "31 ottobre 2026";
+// Generato da scripts/fof-site.mjs il 9 novembre 2026. Non modificare a mano.
+window.FOF_GENERATED = "9 novembre 2026";
 window.FOF_SPECS = [
   {
     "name": "Badge",
@@ -13,8 +13,8 @@ window.FOF_SPECS = [
     "source": {
       "code": "components/ui/badge.tsx",
       "figma": {
-        "fileKey": "DA-COMPILARE",
-        "nodeId": "DA-COMPILARE",
+        "fileKey": "bDIlvCt3yrApyG1qcxHc7B",
+        "nodeId": "2:344",
         "name": "Badge"
       }
     },
@@ -84,6 +84,15 @@ window.FOF_SPECS = [
       ],
       "date": "2026-11-01",
       "verified": true
+    },
+    "figmaDoc": {
+      "frameId": "17:89",
+      "sections": {
+        "overview": "17:90",
+        "variants": "17:109",
+        "mismatches": "17:138"
+      },
+      "builtAt": "2026-11-09"
     }
   },
   {
@@ -98,13 +107,14 @@ window.FOF_SPECS = [
       "states",
       "usage",
       "tokens",
-      "a11y"
+      "a11y",
+      "code"
     ],
     "source": {
       "code": "components/ui/button.tsx",
       "figma": {
-        "fileKey": "DA-COMPILARE",
-        "nodeId": "DA-COMPILARE",
+        "fileKey": "bDIlvCt3yrApyG1qcxHc7B",
+        "nodeId": "2:331",
         "name": "Button"
       }
     },
@@ -509,6 +519,28 @@ window.FOF_SPECS = [
         "Da disabled il bottone esce dall'ordine di tab: se l'utente deve capire perché è bloccato, spiegalo vicino."
       ]
     },
+    "code": [
+      {
+        "title": "Uso base",
+        "lang": "tsx",
+        "snippet": "import { Button } from \"@/components/ui/button\"\n\nexport function Salva() {\n  return <Button>Salva</Button>\n}"
+      },
+      {
+        "title": "Varianti e dimensioni",
+        "lang": "tsx",
+        "snippet": "<Button variant=\"outline\">Annulla</Button>\n<Button variant=\"destructive\">Elimina progetto</Button>\n<Button variant=\"ghost\" size=\"sm\">Altro</Button>\n<Button size=\"lg\">Continua</Button>"
+      },
+      {
+        "title": "Come link",
+        "lang": "tsx",
+        "snippet": "// asChild: lo stile va al figlio, che resta un <a>\n<Button asChild variant=\"link\">\n  <a href=\"/accedi\">Accedi</a>\n</Button>"
+      },
+      {
+        "title": "Disabilitato",
+        "lang": "tsx",
+        "snippet": "<Button disabled>Invio in corso…</Button>"
+      }
+    ],
     "provenance": {
       "sources": [
         "codice",
@@ -519,6 +551,21 @@ window.FOF_SPECS = [
       ],
       "date": "2026-11-01",
       "verified": true
+    },
+    "figmaDoc": {
+      "frameId": "3:6",
+      "sections": {
+        "overview": "3:667",
+        "variants": "3:696",
+        "mismatches": "3:765",
+        "anatomy": "3:793",
+        "states": "3:829",
+        "usage": "3:865",
+        "tokens": "3:1277",
+        "a11y": "3:1032",
+        "code": "3:1228"
+      },
+      "builtAt": "2026-11-06"
     }
   }
 ];

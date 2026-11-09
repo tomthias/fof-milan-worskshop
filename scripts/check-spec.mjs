@@ -34,7 +34,7 @@ const err = (m) => errors.push(m);
 const warn = (m) => warnings.push(m);
 
 // ---------------------------------------------------------------- struttura
-const SECTIONS = ['overview', 'variants', 'mismatches', 'anatomy', 'states', 'usage', 'tokens', 'a11y', 'spacing', 'content', 'context'];
+const SECTIONS = ['overview', 'variants', 'mismatches', 'anatomy', 'states', 'usage', 'tokens', 'a11y', 'code', 'spacing', 'content', 'context'];
 const MANDATORY = ['overview', 'variants', 'mismatches'];
 for (const k of ['name', 'slug', 'description', 'sections', 'source', 'variants', 'mismatches', 'provenance']) {
   if (spec[k] === undefined) err(`manca il campo "${k}"`);
@@ -46,7 +46,7 @@ for (const s of MANDATORY) if (!(spec.sections || []).includes(s)) err(`manca la
 
 const sectionData = {
   anatomy: spec.anatomy, states: spec.states, usage: spec.usage, tokens: spec.tokens,
-  a11y: spec.a11y, spacing: spec.spacing, content: spec.content, context: spec.context,
+  a11y: spec.a11y, code: spec.code, spacing: spec.spacing, content: spec.content, context: spec.context,
 };
 for (const s of spec.sections || []) {
   if (!(s in sectionData)) continue;
@@ -176,6 +176,38 @@ if (usage.some((u) => u.source === 'inferenza') && !(spec.provenance?.sources ||
   warn('ci sono regole da inferenza ma "inferenza" non è fra le fonti di provenance');
 }
 if (spec.provenance?.verified === true && pending.length) warn('verified: true ma ci sono regole non approvate');
+
+// ---------------------------------------------------------------- snippet di codice
+// Uno snippet non deve promettere cose che il componente non fa: import, props e valori veri.
+const snippets = spec.code || [];
+if (spec.code !== undefined && !Array.isArray(spec.code)) err('"code" deve essere una lista di snippet');
+const exported = src ? [...src.matchAll(/export\s*\{([^}]*)\}/g)].flatMap((m) => m[1].split(',').map((s) => s.trim()).filter(Boolean)) : [];
+const pkg = existsSync(join(ROOT, 'package.json')) ? JSON.parse(readFileSync(join(ROOT, 'package.json'), 'utf8')) : {};
+const deps = { ...(pkg.dependencies || {}), ...(pkg.devDependencies || {}) };
+for (const [i, c] of (Array.isArray(snippets) ? snippets : []).entries()) {
+  const name = `snippet ${i + 1}${c && c.title ? ` "${c.title}"` : ''}`;
+  if (!c || typeof c.snippet !== 'string' || !c.snippet.trim()) { err(`${name}: manca il codice (campo "snippet")`); continue; }
+  if (!c.title) warn(`${name}: manca il titolo`);
+  for (const m of c.snippet.matchAll(/import\s*\{([^}]*)\}\s*from\s*["']([^"']+)["']/g)) {
+    const from = m[2];
+    if (from.startsWith('@/components/ui/')) {
+      const file = from.replace('@/components/ui/', '');
+      if (!existsSync(join(ROOT, 'components/ui', `${file}.tsx`))) err(`${name}: importa da "${from}", che non esiste`);
+      else if (file === slug) for (const n of m[1].split(',').map((s) => s.trim()).filter(Boolean)) {
+        if (exported.length && !exported.includes(n)) err(`${name}: "${n}" non è esportato da ${spec.source.code}`);
+      }
+    } else if (!from.startsWith('@/') && !from.startsWith('.') && !deps[from] && from !== 'react') {
+      err(`${name}: usa "${from}", che non è fra le dipendenze del progetto`);
+    }
+  }
+  for (const [prop, values] of Object.entries(realVariants)) {
+    for (const m of c.snippet.matchAll(new RegExp(`\\b${prop}="([^"]*)"`, 'g'))) {
+      if (!values.includes(m[1])) err(`${name}: ${prop}="${m[1]}" non esiste (valori: ${values.join(', ')})`);
+    }
+  }
+  const long = c.snippet.split('\n').filter((l) => l.length > 100).length;
+  if (long) warn(`${name}: ${long} righe oltre 100 caratteri, nel frame si leggono male`);
+}
 
 // ---------------------------------------------------------------- resoconto
 const ok = errors.length === 0;

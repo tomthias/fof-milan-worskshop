@@ -6,6 +6,8 @@
 //   2. aggiunge in fondo:   return await fofBuild(<spec JSON>, "<sezione>");
 //   3. manda il tutto a use_figma
 // Restituisce { ok, section, nodeId, frameId, notes }. Le notes vanno lette sempre.
+// Se qualcosa va storto NON lancia errori: restituisce { ok: false, section, error, notes } e lascia
+// il file com'era (la versione precedente della sezione resta, i nodi a metà vengono tolti).
 //
 // Cosa costruisce:
 //   - pagina "📄 Docs" (la crea se manca) con il frame "<Nome> — Documentation"
@@ -14,33 +16,45 @@
 //   - pagina "🧩 Doc kit" con i componenti Doc/* (li crea la prima volta, poi li riusa):
 //     modificali lì e tutte le documentazioni si aggiornano
 // Colori: sempre variabili della collection "theme" (stessi nomi di globals.css).
+// Lavora sempre con 📄 Docs come pagina attiva: niente finisce nelle altre pagine, nemmeno per un attimo.
 
 async function fofBuild(SPEC, SECTION) {
   const notes = [];
+  const fail = (error, extra) => Object.assign({ ok: false, section: SECTION, error, notes }, extra || {});
   const W = 1440, PAD = 80, CONTENT = W - PAD * 2;
   const SECTION_TITLES = {
     overview: 'Overview', variants: 'Varianti e proprietà', mismatches: 'Differenze codice ↔ Figma',
     anatomy: 'Anatomia', states: 'Stati', usage: 'Do & Don\'t', tokens: 'Colori e variabili',
-    a11y: 'Accessibilità', spacing: 'Spaziature', content: 'Contenuti', context: 'Esempio in contesto',
+    a11y: 'Accessibilità', code: 'Codice', spacing: 'Spaziature', content: 'Contenuti', context: 'Esempio in contesto',
   };
-  if (!SECTION_TITLES[SECTION]) throw new Error('Sezione sconosciuta: ' + SECTION);
-  if (!SPEC.sections.includes(SECTION)) throw new Error('La sezione "' + SECTION + '" non è fra quelle scelte nella spec');
+  if (!SPEC || typeof SPEC !== 'object') return fail('Spec mancante: passa il JSON completo di docs/specs/<slug>.json');
+  if (!SECTION_TITLES[SECTION]) return fail('Sezione sconosciuta: ' + SECTION + '. Valide: ' + Object.keys(SECTION_TITLES).join(', '));
+  if (!(SPEC.sections || []).includes(SECTION)) return fail('La sezione "' + SECTION + '" non è fra quelle scelte nella spec');
   if (['spacing', 'content', 'context'].includes(SECTION)) {
-    throw new Error('La sezione "' + SECTION + '" non ha ancora un builder: è il compito del Lab 3');
+    return fail('La sezione "' + SECTION + '" non ha ancora un builder: è il compito del Lab 3', { skipped: true });
   }
 
-  await figma.loadAllPagesAsync();
+  // use_figma non supporta figma.loadAllPagesAsync(): si caricano le pagine una per una
+  for (const p of figma.root.children) await p.loadAsync();
+  // createFrame/createInstance mettono i nodi nella pagina attiva: che sia sempre 📄 Docs
+  let page = figma.root.children.find((p) => p.name === '📄 Docs');
+  if (!page) { page = figma.createPage(); page.name = '📄 Docs'; }
+  await figma.setCurrentPageAsync(page);
+
+  try {
+    return await fofBuildSection(SPEC, SECTION, page, notes, SECTION_TITLES, W, PAD, CONTENT);
+  } catch (e) {
+    return fail(String((e && e.message) || e));
+  }
+}
+
+async function fofBuildSection(SPEC, SECTION, page, notes, SECTION_TITLES, W, PAD, CONTENT) {
 
   // ------------------------------------------------------------ font
-  let FAMILY = 'Inter Tight';
-  try {
-    await Promise.all(['Regular', 'Medium', 'SemiBold'].map((s) => figma.loadFontAsync({ family: FAMILY, style: s })));
-  } catch (e) {
-    FAMILY = 'Inter';
-    await Promise.all(['Regular', 'Medium', 'Semi Bold'].map((s) => figma.loadFontAsync({ family: FAMILY, style: s })));
-    notes.push('Inter Tight non disponibile: uso Inter');
-  }
-  const STYLE = { 400: 'Regular', 500: 'Medium', 600: FAMILY === 'Inter' ? 'Semi Bold' : 'SemiBold' };
+  // Inter è incluso in Figma: c'è sempre, anche su Figma nel browser e senza font installati
+  const FAMILY = 'Inter';
+  const STYLE = { 400: 'Regular', 500: 'Medium', 600: 'Semi Bold' };
+  await Promise.all(Object.values(STYLE).map((s) => figma.loadFontAsync({ family: FAMILY, style: s })));
 
   // ------------------------------------------------------------ variabili
   const colorVars = await figma.variables.getLocalVariablesAsync('COLOR');
@@ -55,6 +69,13 @@ async function fofBuild(SPEC, SECTION) {
     return figma.variables.setBoundVariableForPaint({ type: 'SOLID', color: { r: 0, g: 0, b: 0 } }, 'color', v);
   };
   const modeId = (name) => (themeCol.modes.find((m) => m.name === name) || {}).modeId;
+  // Light/Dark espliciti su un frame: su alcuni piani Figma non si può. Non è un motivo per fermarsi.
+  let modeWarned = false;
+  const setMode = (node, mode) => {
+    const id = modeId(mode);
+    try { if (id) node.setExplicitVariableModeForCollection(themeCol, id); else throw new Error('modo ' + mode + ' assente'); }
+    catch (e) { if (!modeWarned) { notes.push('modo esplicito non applicato (' + mode + '): ' + e.message + '. Le anteprime usano il modo della pagina'); modeWarned = true; } }
+  };
   const toHex = (c) => '#' + [c.r, c.g, c.b].map((x) => Math.round(x * 255).toString(16).padStart(2, '0')).join('').toUpperCase();
   async function resolve(name, mode) {
     let v = V[name];
@@ -124,6 +145,7 @@ async function fofBuild(SPEC, SECTION) {
       info: ['secondary', 'secondary-foreground', 'INFO'], warning: ['accent', 'accent-foreground', 'ATTENZIONE'] };
     const comps = Object.entries(tones).map(([tone, [bg, fg, label]]) => {
       const c = figma.createComponent();
+      kitPage.appendChild(c); // createComponent la mette nella pagina attiva: combineAsVariants vuole tutto nella pagina del kit
       c.name = 'tone=' + tone;
       c.layoutMode = 'HORIZONTAL'; c.primaryAxisSizingMode = 'AUTO'; c.counterAxisSizingMode = 'AUTO';
       c.paddingLeft = c.paddingRight = 10; c.paddingTop = c.paddingBottom = 4; c.cornerRadius = 999;
@@ -157,21 +179,29 @@ async function fofBuild(SPEC, SECTION) {
     return c;
   }
   const propKey = (inst, name) => Object.keys(inst.componentProperties).find((k) => k.split('#')[0] === name);
+  // Se nel kit qualcuno ha rinominato o tolto una property, si annota e si va avanti
+  function setProp(inst, name, value) {
+    const k = propKey(inst, name);
+    if (k) { inst.setProperties({ [k]: value }); return; }
+    const msg = 'Doc kit: ' + (inst.mainComponent ? inst.mainComponent.name : inst.name) + ' non ha la property "' + name + '"';
+    if (!notes.includes(msg)) notes.push(msg);
+  }
   function pill(tone, label) {
     const set = ensurePill();
     const variant = set.children.find((c) => c.name === 'tone=' + tone) || set.defaultVariant;
     const i = variant.createInstance();
-    if (label) i.setProperties({ [propKey(i, 'label')]: label });
+    if (label) setProp(i, 'label', String(label));
     return i;
   }
   function sectionTitle(index, title) {
     const i = ensureSectionTitle().createInstance();
-    i.setProperties({ [propKey(i, 'kicker')]: String(index).padStart(2, '0'), [propKey(i, 'title')]: title });
+    setProp(i, 'kicker', String(index).padStart(2, '0'));
+    setProp(i, 'title', title);
     return i;
   }
   function marker(n) {
     const i = ensureMarker().createInstance();
-    i.setProperties({ [propKey(i, 'n')]: String(n) });
+    setProp(i, 'n', String(n));
     return i;
   }
 
@@ -226,25 +256,37 @@ async function fofBuild(SPEC, SECTION) {
   }
 
   // ------------------------------------------------------------ pagina e frame di documentazione
-  let page = figma.root.children.find((p) => p.name === '📄 Docs');
-  if (!page) { page = figma.createPage(); page.name = '📄 Docs'; }
+  // Tutto quello che esiste adesso su 📄 Docs e 🧩 Doc kit è "di prima": se la sezione fallisce,
+  // ciò che è nato dopo si toglie e il file torna com'era.
+  const before = new Set([...page.children, ...kitPage.children].map((n) => n.id));
   const DOC_NAME = SPEC.name + ' — Documentation';
   let doc = page.findChild((n) => n.type === 'FRAME' && n.name === DOC_NAME);
-  if (!doc) {
-    doc = frame(DOC_NAME, 'col', 96, [PAD, PAD], 'background');
-    doc.primaryAxisSizingMode = 'AUTO'; doc.counterAxisSizingMode = 'FIXED';
-    doc.resize(W, 400);
-    const right = page.children.reduce((m, n) => Math.max(m, n.x + n.width), 0);
-    page.appendChild(doc); doc.x = page.children.length > 1 ? right + 200 : 0; doc.y = 0;
-    doc.setExplicitVariableModeForCollection(themeCol, modeId('Light'));
-  }
-
   const key = 'section:' + SECTION;
-  let sec = doc.findChild((n) => n.name === key);
-  if (sec) for (const c of [...sec.children]) c.remove();
-  else { sec = frame(key, 'col', 32, 0); doc.appendChild(sec); fill(sec); }
-  const index = SPEC.sections.indexOf(SECTION) + 1;
-  if (SECTION !== 'overview') sec.appendChild(sectionTitle(index, SECTION_TITLES[SECTION]));
+  const old = doc ? doc.findChild((n) => n.name === key) : null;
+  let sec = null;
+  const rollback = () => {
+    try { if (sec && !sec.removed) sec.remove(); } catch (e) { /* già tolto */ }
+    for (const n of [...page.children, ...kitPage.children]) {
+      if (!before.has(n.id) && n !== doc) { try { n.remove(); } catch (e) { /* già tolto */ } }
+    }
+    if (doc && !doc.removed && !before.has(doc.id) && doc.children.length === 0) doc.remove();
+  };
+
+  try {
+    if (!doc) {
+      doc = frame(DOC_NAME, 'col', 96, [PAD, PAD], 'background');
+      doc.resize(W, 400); // resize() fissa anche l'altezza: subito dopo si torna a "hug"
+      doc.primaryAxisSizingMode = 'AUTO'; doc.counterAxisSizingMode = 'FIXED';
+      const right = page.children.filter((n) => n !== doc).reduce((m, n) => Math.max(m, n.x + n.width), 0);
+      page.appendChild(doc); doc.x = page.children.length > 1 ? right + 200 : 0; doc.y = 0;
+      setMode(doc, 'Light');
+    }
+    // la nuova sezione nasce accanto alla vecchia; la vecchia si toglie solo a lavoro finito
+    sec = frame(key, 'col', 32, 0);
+    if (old) doc.insertChild(doc.children.indexOf(old) + 1, sec); else doc.appendChild(sec);
+    fill(sec);
+    const index = SPEC.sections.indexOf(SECTION) + 1;
+    if (SECTION !== 'overview') sec.appendChild(sectionTitle(index, SECTION_TITLES[SECTION]));
 
   // ------------------------------------------------------------ sezioni
   const B = {};
@@ -258,7 +300,7 @@ async function fofBuild(SPEC, SECTION) {
     for (const mode of ['Light', 'Dark']) {
       const stage = frame('preview ' + mode, 'col', 16, [48, 48], 'background');
       stage.cornerRadius = 16; stage.strokes = [paint('border')]; stage.strokeWeight = 1;
-      stage.setExplicitVariableModeForCollection(themeCol, modeId(mode));
+      setMode(stage, mode);
       stage.counterAxisAlignItems = 'CENTER'; stage.primaryAxisAlignItems = 'CENTER';
       stage.appendChild(await instanceOf(main, {}));
       stage.appendChild(text(mode, 12, 400, 'muted-foreground'));
@@ -267,14 +309,15 @@ async function fofBuild(SPEC, SECTION) {
     sec.appendChild(row); fill(row);
     const src = frame('sources', 'row', 8, 0);
     src.appendChild(text('Fonti:', 13, 400, 'muted-foreground'));
-    for (const s of SPEC.provenance.sources) src.appendChild(pill(s === 'inferenza' ? 'warning' : 'info', s));
-    if (!SPEC.provenance.verified) src.appendChild(pill('warning', 'DA VERIFICARE'));
+    const prov = SPEC.provenance || { sources: [], verified: false };
+    for (const s of prov.sources || []) src.appendChild(pill(s === 'inferenza' ? 'warning' : 'info', s));
+    if (!prov.verified) src.appendChild(pill('warning', 'DA VERIFICARE'));
     sec.appendChild(src);
   };
 
   B.variants = async () => {
-    const code = SPEC.variants.code || {};
-    const fig = (SPEC.variants.figma) || {};
+    const code = (SPEC.variants && SPEC.variants.code) || {};
+    const fig = (SPEC.variants && SPEC.variants.figma) || {};
     const propsList = [...new Set([...Object.keys(code), ...Object.keys(fig)])].filter((p) => p !== 'state');
     if (!propsList.length) {
       sec.appendChild(text('Nessuna variante: il componente ha una sola forma. Le parti facoltative sono in Anatomia.', 18, 400, 'muted-foreground', 900));
@@ -307,7 +350,7 @@ async function fofBuild(SPEC, SECTION) {
     const box = frame('mismatches', 'col', 0, 0, 'card');
     box.cornerRadius = 12; box.strokes = [paint('border')]; box.strokeWeight = 1;
     const head = frame('head', 'row', 24, [14, 24], 'muted');
-    for (const [label, w] of [['Cosa', 260], ['Codice', 440], ['Figma', 440], ['', 120]]) {
+    for (const [label, w] of [['Cosa', 260], ['Codice', 400], ['Figma', 360], ['', 120]]) {
       const t = text(label, 13, 500, 'muted-foreground', w); head.appendChild(t);
     }
     box.appendChild(head); fill(head);
@@ -315,8 +358,8 @@ async function fofBuild(SPEC, SECTION) {
       const r = frame('row', 'row', 24, [16, 24]);
       r.strokes = [paint('border')]; r.strokeTopWeight = 1; r.strokeBottomWeight = 0; r.strokeLeftWeight = 0; r.strokeRightWeight = 0;
       r.appendChild(text(m.what, 15, 500, 'foreground', 260));
-      r.appendChild(text(m.code, 15, 400, 'foreground', 440));
-      r.appendChild(text(m.figma, 15, 400, 'foreground', 440));
+      r.appendChild(text(m.code, 15, 400, 'foreground', 400));
+      r.appendChild(text(m.figma, 15, 400, 'foreground', 360));
       r.appendChild(pill(m.severity === 'warning' ? 'warning' : 'info', m.severity === 'warning' ? 'ATTENZIONE' : 'INFO'));
       box.appendChild(r); fill(r);
     }
@@ -361,7 +404,7 @@ async function fofBuild(SPEC, SECTION) {
     for (const s of SPEC.states || []) {
       let node;
       if (s.figma) {
-        const [k, v] = s.figma.split('=');
+        const [k, v] = String(s.figma).split('=');
         node = await instanceOf(main, { [k]: v });
       } else node = placeholder('solo nel codice', s.code);
       const cell = caption(node, s.state);
@@ -442,14 +485,15 @@ async function fofBuild(SPEC, SECTION) {
     for (const c of a.contrast || []) {
       const r = frame('row', 'row', 16, [12, 20]); r.counterAxisAlignItems = 'CENTER';
       r.strokes = [paint('border')]; r.strokeTopWeight = 1; r.strokeBottomWeight = 0; r.strokeLeftWeight = 0; r.strokeRightWeight = 0;
-      const [fg, bg] = c.pair.split('/').map((s) => s.trim());
+      const [fg, bg] = String(c.pair || '').split('/').map((s) => s.trim());
+      if (!fg || !bg) { notes.push('contrasto saltato: coppia non valida "' + c.pair + '"'); continue; }
       const chip = frame('chip', 'row', 0, [6, 10], bg); chip.cornerRadius = 6;
-      chip.setExplicitVariableModeForCollection(themeCol, modeId(c.mode));
+      setMode(chip, c.mode);
       chip.appendChild(text('Aa', 14, 600, fg));
       r.appendChild(chip);
       r.appendChild(text(c.pair, 14, 400, 'foreground', 300));
       r.appendChild(text(c.mode, 13, 400, 'muted-foreground', 50));
-      r.appendChild(text(c.ratio.toFixed(2) + ':1', 14, 500, 'foreground', 70));
+      r.appendChild(text((Number.isFinite(Number(c.ratio)) ? Number(c.ratio).toFixed(2) : '?') + ':1', 14, 500, 'foreground', 70));
       r.appendChild(pill(c.pass ? 'pass' : 'fail', (c.pass ? '✓ ' : '✗ ') + 'min ' + c.min));
       left.appendChild(r); fill(r);
     }
@@ -469,12 +513,103 @@ async function fofBuild(SPEC, SECTION) {
     sec.appendChild(row);
   };
 
+  // Snippet in stile editor: blocco nel modo Dark del tema, barra con titolo e linguaggio,
+  // numeri di riga, font monospace e colori della sintassi presi dalle variabili.
+  B.code = async () => {
+    const list = Array.isArray(SPEC.code) ? SPEC.code.filter((c) => c && typeof c.snippet === 'string' && c.snippet.trim()) : [];
+    if (!list.length) { sec.appendChild(text('Nessuno snippet nella spec: aggiungili nel campo "code".', 18, 400, 'muted-foreground', 900)); return; }
+
+    let MONO = null;
+    for (const family of ['JetBrains Mono', 'Roboto Mono', 'Source Code Pro', 'Menlo', 'Courier New']) {
+      try { await figma.loadFontAsync({ family, style: 'Regular' }); MONO = { family, style: 'Regular' }; break; } catch (e) { /* prossimo */ }
+    }
+    if (!MONO) { MONO = { family: FAMILY, style: STYLE[400] }; notes.push('nessun font monospace disponibile: uso ' + FAMILY); }
+    const mono = (chars, size, color) => {
+      const t = figma.createText();
+      t.fontName = MONO; t.fontSize = size; t.lineHeight = { value: Math.round(size * 1.6), unit: 'PIXELS' };
+      t.characters = chars; t.fills = [paint(color)];
+      return t;
+    };
+
+    // colori della sintassi (nel modo Dark: commenti navy chiaro, stringhe lime, parole chiave rosa,
+    // tag lilla, attributi rosso chiaro). Gruppi: 1 commento · 2 stringa · 3 parola chiave · 4-5 tag · 6 attributo
+    const TOKEN = /(\/\/[^\n]*|\/\*[\s\S]*?\*\/)|("(?:[^"\\\n]|\\.)*"|'(?:[^'\\\n]|\\.)*'|\x60(?:[^\x60\\]|\\.)*\x60)|\b(import|from|export|default|function|return|const|let|type|interface|as|if|else)\b|(<\/?)([A-Za-z][\w.]*)|\b([A-Za-z_][\w-]*)(?==)/g;
+    const highlight = (t, src) => {
+      TOKEN.lastIndex = 0;
+      let m;
+      while ((m = TOKEN.exec(src))) {
+        let start = m.index, end = m.index + m[0].length, color = null;
+        if (m[1]) color = 'muted-foreground';
+        else if (m[2]) color = 'primary';
+        else if (m[3]) color = 'link';
+        else if (m[5]) { start += m[4].length; color = 'secondary'; }
+        else if (m[6]) color = 'destructive';
+        if (color && end > start) t.setRangeFills(start, end, [paint(color)]);
+      }
+    };
+
+    const HALF = (CONTENT - 32) / 2;
+    const grid = frame('snippets', 'row', 32, 0);
+    grid.layoutWrap = 'WRAP'; grid.counterAxisSpacing = 32;
+    for (const c of list) {
+      const src = c.snippet.replace(/\t/g, '  ').replace(/\s+$/, '');
+      const lines = src.split('\n');
+
+      const block = frame('snippet: ' + (c.title || 'codice'), 'col', 0, 0, 'card');
+      block.cornerRadius = 12; block.strokes = [paint('border')]; block.strokeWeight = 1; block.clipsContent = true;
+      setMode(block, 'Dark');
+
+      const bar = frame('bar', 'row', 12, [12, 16], 'muted');
+      bar.primaryAxisAlignItems = 'SPACE_BETWEEN'; bar.counterAxisAlignItems = 'CENTER';
+      const dots = frame('dots', 'row', 6, 0);
+      for (const col of ['destructive', 'primary', 'secondary']) {
+        const d = figma.createEllipse(); d.resize(10, 10); d.fills = [paint(col)]; dots.appendChild(d);
+      }
+      bar.appendChild(dots);
+      bar.appendChild(text(c.title || '', 13, 500, 'foreground'));
+      bar.appendChild(mono(c.lang || 'tsx', 12, 'muted-foreground'));
+      block.appendChild(bar);
+
+      const body = frame('body', 'row', 16, [16, 20]);
+      const gutter = mono(lines.map((_, i) => String(i + 1)).join('\n'), 14, 'muted-foreground');
+      gutter.name = 'line numbers'; gutter.textAlignHorizontal = 'RIGHT'; gutter.opacity = 0.6;
+      const code = mono(src, 14, 'foreground');
+      code.name = 'code';
+      highlight(code, src);
+      body.appendChild(gutter); body.appendChild(code);
+      block.appendChild(body);
+
+      // mezza larghezza se ci sta, altrimenti tutta la riga
+      const need = code.width + gutter.width + 16 + 40;
+      block.counterAxisSizingMode = 'FIXED';
+      block.resize(need <= HALF ? HALF : CONTENT, block.height);
+      block.primaryAxisSizingMode = 'AUTO';
+      if (need > CONTENT) notes.push('snippet "' + (c.title || '') + '": righe più larghe del frame, il blocco le taglia');
+      grid.appendChild(block);
+      fill(bar); fill(body);
+    }
+    sec.appendChild(grid); fill(grid);
+  };
+
   await B[SECTION]();
+
+  // ------------------------------------------------------------ pulizia: niente deve restare fuori dal frame
+  for (const n of [...page.children]) {
+    if (!before.has(n.id) && n !== doc) { notes.push('nodo fuori posto tolto: ' + n.name); n.remove(); }
+  }
+  if (old && !old.removed) old.remove();
 
   // ------------------------------------------------------------ ordine delle sezioni come nella spec
   const order = SPEC.sections.map((s) => 'section:' + s);
   const present = doc.children.filter((c) => order.includes(c.name)).sort((x, y) => order.indexOf(x.name) - order.indexOf(y.name));
   present.forEach((n, i) => doc.insertChild(i, n));
+  // il frame cresce con le sezioni (vale anche per i frame costruiti con la versione precedente del builder)
+  doc.primaryAxisSizingMode = 'AUTO';
 
   return { ok: true, section: SECTION, nodeId: sec.id, frameId: doc.id, notes };
+  } catch (e) {
+    rollback();
+    notes.push('niente è cambiato: ' + (old ? 'la versione precedente della sezione è rimasta com\'era' : 'la sezione non è stata creata'));
+    throw e;
+  }
 }

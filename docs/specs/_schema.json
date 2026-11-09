@@ -13,7 +13,7 @@
     "sections": {
       "type": "array",
       "description": "Le sezioni scelte dal menu, nell'ordine in cui compaiono nel frame. overview, variants e mismatches sono obbligatorie.",
-      "items": { "enum": ["overview", "variants", "mismatches", "anatomy", "states", "usage", "tokens", "a11y", "spacing", "content", "context"] },
+      "items": { "enum": ["overview", "variants", "mismatches", "anatomy", "states", "usage", "tokens", "a11y", "code", "spacing", "content", "context"] },
       "uniqueItems": true
     },
 
@@ -168,6 +168,20 @@
         "keyboard": { "type": "array", "items": { "type": "string" } },
         "targetSize": { "type": "string" },
         "notes": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+
+    "code": {
+      "type": "array",
+      "description": "Snippet di codice da copiare. Nel frame Figma compaiono come blocchi in stile editor, con i colori della sintassi.",
+      "items": {
+        "type": "object",
+        "required": ["title", "snippet"],
+        "properties": {
+          "title": { "type": "string", "description": "Cosa mostra lo snippet, es. 'Uso base'" },
+          "lang": { "type": "string", "default": "tsx", "description": "Linguaggio, scritto nella barra del blocco" },
+          "snippet": { "type": "string", "description": "Il codice. A capo con \\n, rientri con due spazi" }
+        }
       }
     },
 

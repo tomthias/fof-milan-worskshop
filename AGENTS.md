@@ -61,7 +61,7 @@ decidere da solo di scrivere in Figma.
 `slug` = nome del file in `components/ui/`, senza estensione (`radio-group.tsx` → `radio-group`).
 
 ### 3. Cosa non si tocca
-- `components/ui/*`, `app/globals.css`, `tokens/fof-theme.json`: si documentano, non si modificano.
+- `components/ui/*`, `app/globals.css`, `tokens/tokens.json`: si documentano, non si modificano.
   Se trovi un problema, segnalalo. (Anche perché il visualizzatore HTML in `docs/site/assets/` è
   compilato da questi file: se cambiano, va ricompilato da chi tiene il corso.)
 - `docs/site/index.html` e `docs/site/assets/`: sono compilati, non si toccano.
