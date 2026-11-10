@@ -5,29 +5,55 @@ Se resti indietro, nessun problema: alla fine c'è sempre il Button già documen
 
 ---
 
-## Lab 1 — Scegli cosa documentare (20')
+## Prima di cominciare
 
-**Obiettivo**: una spec approvata per un componente.
+Apri l'agente (Claude Code: `claude` nella cartella `fof-milan`; Claude in chat: una chat nel Progetto
+`fof-milan`; Cursor: la chat) e incolla il link della **tua copia** del file Figma:
+
+> Lavoriamo su questo file Figma: <link>
+
+L'agente userà quel file per tutta la sessione. Se riapri l'agente, ridaglielo.
+
+---
+
+## Lab 1 — Istruisci l'agente (20')
+
+**Obiettivo**: una skill `/fof-spec` che lavora come vuoi tu, e una spec approvata.
+
+La `/fof-spec` che trovi nella cartella è una **versione base**: legge il componente e scrive una spec
+valida, ma non sa niente di come vuoi lavorare. Il lavoro vero è insegnarglielo.
 
 1. Scegli un componente fra **Input, Switch, Card, Alert**.
-2. Scrivi in chat: `/fof-spec <componente>` (per esempio `/fof-spec switch`).
-3. L'agente ti mostra il **menu delle sezioni**. Oltre alle tre obbligatorie
-   (Overview, Varianti, Differenze codice ↔ Figma) scegline **2 o 3**:
+2. Lancia `/fof-spec <componente>` (per esempio `/fof-spec switch`) e guarda cosa fa.
+   Leggi la spec che ha scritto in `docs/specs/<componente>.json`.
+3. Chiediti cosa manca. Ti ha chiesto quali sezioni vuoi? Ti ha mostrato bene le differenze
+   codice ↔ Figma? Se gli chiedi dei Do & Don't, come li propone?
+4. Apri `.claude/skills/fof-spec/SKILL.md` nell'editor e, in fondo, nella sezione
+   **"Le tue regole"**, scrivi una o due regole. Una frase ciascuna, concreta. Per esempio:
+   *"Prima di scrivere mostra il menu delle sezioni (`references/menu-sezioni.md`) e chiedimi quali voglio."*
+
+   **Con Claude in chat** non puoi modificare i file del Progetto: scrivi le tue regole nelle
+   *Instructions* del Progetto, sotto "Le mie regole per /fof-spec", e apri una chat nuova per provarle.
+5. Salva il file e **riapri l'agente**, poi rilancia `/fof-spec` sullo stesso componente.
+   Riaprire serve: l'agente legge le skill quando parte, e nella stessa sessione può continuare a usare
+   la versione vecchia. Claude Code: `/exit`, poi `claude`. Cursor e Claude in chat: chat nuova.
+   È cambiato qualcosa? Se no, riscrivi la regola più precisa. È questo il ciclo:
+   **prova → guarda → correggi la skill → riapri → riprova**.
+6. Scegli 2 o 3 sezioni oltre alle obbligatorie (Overview, Varianti, Differenze codice ↔ Figma):
 
    | Sezione | Buona per |
    |---|---|
    | Anatomia | componenti con più parti (Card, Alert) |
    | Stati | componenti interattivi (Switch, Input) |
-   | Do & Don't | regole d'uso |
+   | Do & Don't | regole d'uso — da approvare tu, una per una |
    | Colori e variabili | vedere quali variabili usa |
    | Accessibilità | contrasti, tastiera, area cliccabile |
 
-4. Leggi le **differenze fra codice e Figma** che l'agente ha trovato. Sono vere? Sono errori o scelte?
-5. Se hai scelto Do & Don't: leggi le regole proposte e **approva, scarta o riscrivi**.
-   Puoi anche comporre tu un esempio in Figma, selezionarlo e chiedere all'agente di usarlo.
-6. Quando la spec ti convince, chiedi all'agente di lanciare `check-spec`.
+7. Leggi le **differenze fra codice e Figma** trovate. Sono vere? Sono errori o scelte?
+8. Quando la spec ti convince, chiedi all'agente di lanciare `check-spec`.
 
-✅ **Fatto quando**: `check-spec` dice "pronta per /fof-figma-doc".
+✅ **Fatto quando**: hai scritto almeno una regola che cambia davvero il comportamento della skill,
+e `check-spec` dice "pronta per /fof-figma-doc".
 
 ---
 
@@ -48,6 +74,8 @@ della pill "DO"): si aggiorna in tutte le documentazioni.
 ✅ **Fatto quando**: hai un frame di documentazione e l'hai rigenerato almeno una volta.
 
 ### ⚡ Bonus per chi finisce prima — la documentazione anche in HTML
+
+(Solo con Claude Code o Cursor: serve la cartella sul computer.)
 
 1. Scrivi `/fof-site`.
 2. Apri `docs/site/index.html` (doppio clic).

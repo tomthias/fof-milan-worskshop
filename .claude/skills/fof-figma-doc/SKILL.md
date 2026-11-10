@@ -19,12 +19,15 @@ Non inventa niente: tutto quello che finisce nel frame è già scritto nella spe
      errori e suggerisci `/fof-spec <slug>` per sistemarli. Gli avvisi (`!`) non bloccano, ma riportali.
    - Senza Node: avvisa che fai il controllo leggendo i file e che consuma più token, poi segui la lista
      di `../fof-spec/references/controlli-senza-node.md`. Se trovi un errore, fermati come sopra.
-2. **Figma è collegato e può scrivere.** Deve esserci lo strumento `use_figma`.
+2. **Il file giusto.** Si scrive solo nella copia dell'utente: usa il link Figma che ha dato in chat
+   (AGENTS.md, regola 6), non il `fileKey` della spec. Se non l'ha dato, chiedilo prima di continuare.
+   Se un `nodeId` della spec non esiste in quel file, il builder cerca il componente per nome.
+3. **Figma è collegato e può scrivere.** Deve esserci lo strumento `use_figma`.
    Se manca: di' che il server Figma non è collegato o non ha la scrittura (vedi SETUP.md) e fermati.
-3. **Se c'è la skill `figma-use`** (arriva con il plugin Figma di Cursor) seguila per il modo corretto di
+4. **Se c'è la skill `figma-use`** (arriva con il plugin Figma di Cursor) seguila per il modo corretto di
    chiamare `use_figma`. Se non c'è (per esempio in Claude Code), vai avanti lo stesso: il builder
    gestisce già le cose delicate.
-4. **Chiedi conferma** in una riga, poi aspetta:
+5. **Chiedi conferma** in una riga, poi aspetta:
    > Creo "Button — Documentation" nella pagina 📄 Docs del file <nome file>, sezioni: overview, varianti, … Procedo?
 
 ## Come costruire
@@ -58,7 +61,7 @@ return await fofBuild(<spec JSON completa>, "<sezione>");
 2. **Aggiorna la spec** con gli id restituiti, nel campo `figmaDoc`:
    `{ "frameId": "...", "sections": { "overview": "...", ... }, "builtAt": "<data>" }`.
    È l'unico campo della spec che questa skill può modificare.
-3. **Resoconto** in una tabella breve: sezioni costruite, note del builder, cosa controllare a occhio.
+3. **Resoconto** in poche righe: sezioni costruite, note del builder che contano, cosa controllare a occhio.
 
 ## Cosa non fare
 

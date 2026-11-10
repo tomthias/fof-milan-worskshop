@@ -1,4 +1,4 @@
-# Il tema fof-milano: un nome, due mondi
+# Il tema fof-milan: un nome, due mondi
 
 Il tema usa i colori di Friends of Figma Milan con i **nomi delle variabili shadcn**.
 Lo stesso nome esiste in tre posti:

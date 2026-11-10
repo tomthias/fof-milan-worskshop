@@ -1,9 +1,9 @@
-# AGENTS.md — fof-milano
+# AGENTS.md — fof-milan
 
 Repo del workshop **Design system e AI** di Friends of Figma Milan.
 Qui si documentano componenti shadcn/ui con un agente AI, leggendo da codice e Figma e
-scrivendo la documentazione in Figma. Queste regole valgono per qualsiasi agente (Cursor,
-Claude Code, …). Leggile tutte prima di generare qualcosa.
+scrivendo la documentazione in Figma. Queste regole valgono per qualsiasi agente (Claude Code,
+Claude in chat, Cursor, …). Leggile tutte prima di generare qualcosa.
 
 Chi usa questa repo è quasi sempre un **designer**: spiega in parole semplici, senza gergo da
 sviluppatore, e mostra cosa hai fatto più che come.
@@ -30,7 +30,7 @@ qualcosa, si corregge la spec e si rigenera. Mai il contrario.
 
 | Comando | Cosa fa | Scrive dove |
 |---|---|---|
-| `/fof-spec <componente>` | legge le fonti, propone le sezioni, scrive la spec | `docs/specs/` |
+| `/fof-spec <componente>` | legge le fonti e scrive la spec (versione base: la completi tu nel Lab 1) | `docs/specs/` |
 | `/fof-figma-doc <componente>` | costruisce il frame di documentazione dalla spec | Figma, pagine `📄 Docs` e `🧩 Doc kit` |
 | `/fof-site` | aggiorna la documentazione HTML con tutte le spec | `docs/site/specs.js` |
 
@@ -78,13 +78,27 @@ decidere da solo di scrivere in Figma.
 Lavora su un componente per volta e fermati alla fine di ogni passaggio mostrando cosa hai
 prodotto. Mai la libreria intera in un colpo, se non viene chiesto esplicitamente.
 
-### 6. Prima di scrivere in Figma
+### 6. Il file Figma su cui lavori
+Ogni partecipante lavora sulla **sua copia** del file del corso. Si legge e si scrive solo lì.
+- Usa il link Figma che l'utente ha dato in chat in questa sessione. Se non l'ha dato, **chiedilo una
+  volta** prima di leggere o scrivere in Figma ("Incollami il link della tua copia del file Figma"),
+  poi riusalo per tutta la sessione.
+- Il `fileKey` scritto nelle spec (`source.figma.fileKey`) è solo un riferimento: non usarlo per
+  decidere dove leggere o scrivere. Quando aggiorni una spec, scrivici il `fileKey` del file dell'utente.
+- Se un `nodeId` della spec non esiste nel file dell'utente, cerca il componente per nome.
+
+### 7. Se non c'è una cartella (Claude in chat)
+I file del workshop sono nel Progetto, in sola lettura. Quando una regola dice di scrivere un file,
+crealo come file da scaricare e mostralo; gli script `node` eseguili nel tuo ambiente di codice se
+puoi, altrimenti fai i controlli leggendo i file e dillo. Tutto il resto vale uguale.
+
+### 8. Prima di scrivere in Figma
 Di' in una riga cosa crei e dove (file, pagina, sezioni), poi aspetta conferma.
 Dopo aver scritto, **guarda uno screenshot** del risultato prima di dire che è finito.
 
 ---
 
-## Colori (tema fof-milano)
+## Colori (tema fof-milan)
 
 Il tema usa la palette di Friends of Figma Milan con i nomi delle variabili shadcn. Gli stessi
 nomi esistono in `app/globals.css` e nella collection `theme` di Figma (modi Light e Dark), con
@@ -134,5 +148,6 @@ meno preciso. Il server shadcn invece non parte: si salta, non è indispensabile
 
 ## Resoconto finale
 
-Alla fine di ogni comando: una tabella breve con cosa hai creato o modificato, fonti usate,
-differenze trovate e cosa resta da approvare. Niente riepiloghi lunghi.
+Alla fine di ogni comando: **al massimo 5 righe**. Cosa hai creato o modificato, cosa resta da
+decidere all'utente, prossimo passo. Niente tabelle lunghe né riepiloghi di quello che hai letto:
+se l'utente vuole i dettagli, li chiede.

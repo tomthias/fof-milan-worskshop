@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "fof-milano/component-spec",
-  "title": "Spec di un componente — fof-milano",
+  "$id": "fof-milan/component-spec",
+  "title": "Spec di un componente — fof-milan",
   "description": "Unica fonte di verità per la documentazione di un componente. Il frame Figma si costruisce da qui. Per correggere la doc si corregge la spec e si rigenera.",
   "type": "object",
   "required": ["name", "slug", "description", "sections", "source", "variants", "mismatches", "provenance"],

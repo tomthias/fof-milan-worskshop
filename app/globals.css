@@ -4,7 +4,7 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
-  Tema fof-milano — palette Friends of Figma Milan, mappata sui nomi shadcn.
+  Tema fof-milan — palette Friends of Figma Milan, mappata sui nomi shadcn.
   Stessi nomi delle variabili Figma (collection "theme", modi Light / Dark).
   Valori in hex invece di oklch: così Figma e codice hanno esattamente lo stesso numero.
   Controllo coppie e contrasto: node scripts/fof-tokens.mjs

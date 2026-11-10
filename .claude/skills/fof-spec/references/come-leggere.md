@@ -28,13 +28,13 @@ Se il componente locale è diverso dall'originale (classi diverse, varianti in p
 
 ## Figma (MCP `figma`)
 
-1. Trova il component set: se la spec ha già `source.figma.nodeId` usa quello, altrimenti cerca
+1. Lavora sul file Figma dell'utente (link in chat, vedi AGENTS.md). Trova il component set: prova il `source.figma.nodeId` della spec, se non esiste in quel file cerca
    per nome con `get_metadata` sulla pagina dei componenti.
 2. `get_metadata` sul component set → variant properties (nomi e valori) e nomi dei layer.
 3. `get_design_context` su una variante → struttura e auto layout.
 4. `get_variable_defs` → quali variabili sono collegate e dove. Con la code syntax impostata,
    i nomi tornano come `var(--primary)`: è lo stesso nome di `globals.css`.
-5. Scrivi `source.figma.fileKey` e `nodeId` nella spec.
+5. Scrivi nella spec `source.figma.fileKey` (quello del file dell'utente, preso dal link in chat) e `nodeId`.
 
 Le variant property che in codice sono stati CSS (es. `state=hover`) vanno in `variants.figma`
 così come sono, e la differenza va in `mismatches` con `severity: "info"`.

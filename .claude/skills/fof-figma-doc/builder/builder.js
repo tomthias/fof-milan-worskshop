@@ -1,4 +1,4 @@
-// fof-milano — builder del frame di documentazione.
+// fof-milan — builder del frame di documentazione.
 // Gira DENTRO Figma tramite lo strumento use_figma (Plugin API). Non si lancia da terminale.
 //
 // Come lo usa l'agente (una chiamata use_figma per sezione):
