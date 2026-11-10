@@ -1,5 +1,5 @@
-// Generato da scripts/fof-site.mjs il 9 novembre 2026. Non modificare a mano.
-window.FOF_GENERATED = "9 novembre 2026";
+// Generato da scripts/fof-site.mjs il 10 novembre 2026. Non modificare a mano.
+window.FOF_GENERATED = "10 novembre 2026";
 window.FOF_SPECS = [
   {
     "name": "Badge",
