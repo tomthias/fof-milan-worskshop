@@ -4,8 +4,8 @@ Benvenuto. In questa cartella c'è tutto quello che serve per il workshop: una p
 di componenti shadcn, il tema fof-milan, le regole per l'agente AI e tre skill che documentano
 i componenti leggendo il codice e Figma e scrivendo la documentazione in Figma.
 
-**Prima del workshop** segui [SETUP.md](SETUP.md): circa 20 minuti, e alla fine c'è un test
-di 2 minuti che ti dice se è tutto a posto.
+**Prima del workshop** segui [SETUP.md](SETUP.md): 30-40 minuti, e alla fine c'è un test
+finale che ti dice se è tutto a posto.
 
 ---
 
@@ -35,7 +35,8 @@ fof-milan/
 ├── AGENTS.md              ← le regole che l'agente segue in questa cartella
 ├── claude-chat/           ← solo per chi usa Claude in chat: istruzioni del Progetto e skill in .zip
 │
-├── components/ui/         ← 6 componenti shadcn: button, badge, input, switch, card, alert
+├── components/ui/         ← 10 componenti shadcn: button, badge, input, switch, card, alert,
+│                             checkbox, radio-group, tabs, select
 ├── app/globals.css        ← il tema in codice (variabili Light e Dark)
 ├── tokens/tokens.json  ← lo stesso tema come variabili Figma
 │
@@ -44,7 +45,7 @@ fof-milan/
 │   ├── site/              ← il visualizzatore HTML della documentazione (vedi sotto)
 │   └── specs/             ← le spec di documentazione (una per componente)
 │       ├── _schema.json   ← il formato
-│       ├── button.json    ← esempio completo, da usare come riferimento
+│       ├── _esempio-button.json ← esempio completo, solo da guardare: la spec del Button la scrivi tu
 │       └── badge.json     ← esempio minimo
 │
 ├── scripts/
@@ -59,12 +60,13 @@ fof-milan/
 ```
 
 **`docs/site/` è già pronto, ed è giusto così.** È un visualizzatore: una pagina HTML che mostra le
-spec con i componenti veri. Oggi contiene Button e Badge; i componenti che documenti tu compaiono
+spec con i componenti veri. Oggi contiene solo il Badge; i componenti che documenti tu compaiono
 quando lanci `/fof-site` (bonus del Lab 2). `assets/app.css` e `app.js` sono file compilati: se
 l'editor mostra avvisi su questi file, ignorali e non toccarli.
 
 Insieme a questa cartella ricevi il **file Figma del corso**: stessi componenti, stesse
-variabili, una pagina `📄 Docs` con il Button già documentato.
+variabili, una pagina `📄 Docs` con **Button — Esempio**, una documentazione completa da usare come
+riferimento. Lì l'agente costruisce anche la tua.
 
 ---
 
@@ -84,6 +86,7 @@ La spec è l'unica fonte di verità: il frame si rigenera sempre da lì.
 
 | Componente | Stato |
 |---|---|
-| Button | completo, con tutte le sezioni: è il riferimento |
+| Button | da documentare tu. Come riferimento c'è `docs/specs/_esempio-button.json` (completo, con tutte le sezioni) |
 | Badge | minimo, solo le sezioni obbligatorie |
 | Input, Switch, Card, Alert | da documentare: sono il materiale dei lab |
+| Checkbox, Radio Group, Tabs, Select | da documentare, un po' più complessi: più parti e più stati |

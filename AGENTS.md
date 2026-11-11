@@ -68,6 +68,8 @@ decidere da solo di scrivere in Figma.
 - In Figma: componenti del corso e variabili. Si scrive solo in `📄 Docs` e `🧩 Doc kit`.
 
 ### 4. Stile dei testi
+Queste sono le regole di partenza. **Se in `.claude/skills/fof-spec/SKILL.md`, sezione "Le tue regole",
+l'utente ha scritto una regola diversa (per esempio la lingua), vince la sua.**
 - Italiano. Nomi di prop, varianti e variabili restano come nel codice.
 - Frasi brevi e concrete. Niente aggettivi da brochure ("potente", "flessibile", "elegante").
 - Descrizione del componente: massimo 2 frasi. Regole, note, descrizioni di prop: 1 frase.
@@ -106,7 +108,7 @@ code syntax `var(--nome)`.
 
 Regole d'uso, che valgono anche per qualsiasi cosa generi in Figma:
 
-1. **Il lime (`#E2FD94`) va solo su navy**, oppure come sfondo con testo navy o ink. Mai come testo
+1. **Il lime (`#E4FF97`) va solo su navy**, oppure come sfondo con testo navy o ink. Mai come testo
    o bordo su chiaro: su bianco il contrasto è 1,1:1.
 2. **Rosa e lilla su chiaro sono solo sfondi o decorazioni**, mai testo o bordi. Per il rosa come
    testo in Light c'è `link` (`#B0107F`, 6,5:1).

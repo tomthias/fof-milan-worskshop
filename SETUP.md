@@ -1,6 +1,6 @@
 # Setup — da fare prima del workshop
 
-Tempo: circa 20 minuti. Alla fine c'è un **test di 2 minuti**: se passa, sei pronto.
+Tempo: **30-40 minuti** in tutto, test finale compreso. Se alla fine il test passa, sei pronto.
 Se qualcosa non va, scrivici prima del workshop: in aula non c'è tempo per sistemare le installazioni.
 
 Non serve saper programmare. Ti chiediamo solo di installare due o tre cose e di scrivere qualche
@@ -10,8 +10,8 @@ frase in una chat.
 
 ## Cosa ti serve
 
-- [ ] **Un account Figma con piano Professional, Organization o Enterprise** (va bene anche Education).
-      La scrittura sul canvas tramite AI è in beta e non è disponibile sul piano gratuito.
+- [ ] **Un account Figma**, anche gratuito. Ti invitiamo noi nello spazio del workshop, che ha già
+      il piano giusto per far scrivere l'agente in Figma. Accetta l'invito che ti arriva per mail.
 - [ ] **Un agente AI che sappia collegarsi a Figma.** Va bene quello che usi già. Le tre strade
       descritte qui sotto:
       - **Claude Code** — con un abbonamento Claude (Pro o Max): lavora sui file della cartella;
@@ -21,8 +21,10 @@ frase in una chat.
 
       Ne basta **uno**. Usi un altro agente (Codex, Windsurf, Copilot…)? Va bene se legge `AGENTS.md`
       e si collega al server MCP di Figma: segui la strada che gli somiglia di più.
-- [ ] **Node.js 18 o più recente — consigliato, non obbligatorio.** Serve agli script di controllo.
-      Senza Node i lab funzionano lo stesso, ma l'agente consuma più quota ed è meno preciso.
+- [ ] **Node.js 18 o più recente: consigliato.** Claude Code **non** ne ha bisogno per funzionare.
+      Node serve agli script del workshop: il controllo della spec (`check-spec`), la pagina HTML
+      (`/fof-site`) e l'installazione di skill-creator nel Lab 3. Senza Node l'agente fa i controlli
+      leggendo i file: funziona, ma consuma più quota ed è meno preciso, e il bonus HTML non c'è.
       Si scarica da **nodejs.org** (versione LTS).
 
 ---
@@ -33,22 +35,25 @@ Anche se non scriverai codice, ti serve un programma per **aprire la cartella de
 file**: le spec, le skill, i componenti.
 
 - Se userai **Cursor**: Cursor è già un editor, installa quello (cursor.com).
-- Se userai **Claude Code**: installa **Visual Studio Code** (code.visualstudio.com), gratuito.
+- Se userai **Claude Code**: installa **Visual Studio Code** da https://code.visualstudio.com/ (gratuito).
 - Se userai **Claude in chat**: salta questo passo.
+
+> ⚠️ **Visual Studio Code e Visual Studio sono due programmi diversi.** Visual Studio (icona viola,
+> per .NET) non va bene. Serve Visual Studio **Code**: icona azzurra, si scarica dal link qui sopra.
 
 ## 2. Scarica la cartella del workshop
 
-La cartella sta su GitHub: **github.com/tomthias/fof-milan-workshop**.
+La cartella sta su GitHub: **https://github.com/tomthias/fof-milan**.
 Con Claude Code o Cursor va scaricata sul tuo computer: l'agente lavora sui file che hai in locale.
 Con Claude in chat ti serve solo se non puoi collegare GitHub al Progetto (Strada B, punto 3).
 
 **Il modo più semplice (senza account GitHub):**
 1. Apri il link, premi il bottone verde **Code** → **Download ZIP**.
 2. Scompatta lo zip (doppio clic).
-3. Rinomina la cartella in **`fof-milan`** (GitHub la chiama `fof-milan-workshop-main`) e spostala dove
+3. Rinomina la cartella in **`fof-milan`** (GitHub la chiama `fof-milan-main`) e spostala dove
    la ritrovi, per esempio in Documenti.
 
-**Se usi già git:** `git clone https://github.com/tomthias/fof-milan-workshop.git fof-milan`
+**Se usi già git:** `git clone https://github.com/tomthias/fof-milan.git fof-milan`
 
 Con Claude Code o Cursor, apri la cartella nell'editor: **File → Open Folder** (in italiano *Apri cartella*) → scegli `fof-milan`.
 A sinistra devi vedere `README.md`, `SETUP.md`, `components`, `docs`…
@@ -80,9 +85,14 @@ invece di cliccare. Non ti spaventare: lo userai come una chat.
 2. Apri il terminale **integrato**: menu **Terminal → New Terminal** (*Terminale → Nuovo terminale*).
    In basso si apre un pannello: il terminale è già "dentro" la cartella del workshop, ed è quello che
    serve.
-3. Incolla il comando di installazione che trovi su **claude.com/claude-code** (sezione *Install*) e
-   premi Invio. Su Mac è una riga che comincia con `curl`; su Windows c'è il comando per PowerShell.
-4. Quando ha finito, chiudi e riapri il terminale.
+3. Incolla questo comando e premi Invio:
+   - **Mac:** `curl -fsSL https://claude.ai/install.sh | bash`
+   - **Windows (PowerShell):** `irm https://claude.ai/install.ps1 | iex`
+4. Quando ha finito, chiudi e riapri il terminale e scrivi `claude --version`. Se risponde con un
+   numero, è installato.
+   **Su Mac, se risponde `command not found`:** incolla questa riga, premi Invio e riprova
+   `claude --version`:
+   `echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc && source ~/.zshrc`
 
 **Avvialo** (ogni volta):
 1. Nel terminale integrato scrivi `claude` e premi Invio.
@@ -112,7 +122,7 @@ Niente da installare: lavori nel browser o nell'app Claude. Al posto della carte
    accedi a Figma.
 2. **Crea un Progetto** e chiamalo `fof-milan`.
 3. **Metti la cartella nel Progetto.** Nei file del Progetto scegli **Add content → GitHub** e collega
-   il repo `tomthias/fof-milan-workshop` (selezionalo tutto). Se l'opzione GitHub non c'è, carica a mano
+   il repo `tomthias/fof-milan` (selezionalo tutto). Se l'opzione GitHub non c'è, carica a mano
    i file dalla cartella scaricata al passo 2: `AGENTS.md`, `components/ui/`, `app/globals.css`,
    `docs/specs/`, `tokens/tokens.json` e tutta `.claude/skills/`.
 4. **Istruzioni del Progetto.** Apri `claude-chat/ISTRUZIONI-PROGETTO.md`, copia il testo indicato e
@@ -138,18 +148,19 @@ leggendo i file. Il bonus HTML non c'è.
 
 ---
 
-## Test di 2 minuti
+## Test finale (5-10 minuti)
 
-Nella chat dell'agente (Claude Code, la chat del Progetto Claude o Cursor), prova **uno alla volta**:
+Prima del test devi aver **accettato l'invito** allo spazio Figma del workshop e **duplicato il file**
+(passo 3). Nella chat dell'agente (Claude Code, la chat del Progetto Claude o Cursor), prova **uno alla volta**:
 
 1. **Leggi da Figma.** *"Leggi il file Figma `<incolla il link della tua copia>` ed elencami le pagine."*
    Deve risponderti con i nomi delle pagine del file (fra cui `📄 Docs` e `🧩 Doc kit`).
    È il primo uso di MCP: l'agente ha chiesto a Figma, Figma ha risposto.
 2. **Può scrivere?** *"Elenca gli strumenti Figma che hai a disposizione."*
    Deve comparire **`use_figma`**: è lo strumento che scrive nel file.
-3. **Una skill.** Scrivi `/fof-spec badge`.
-   L'agente legge il Badge dal codice e da Figma e ti dice cosa ha trovato.
-   Se ti fa domande, rispondi pure "lascia così".
+3. **Una skill.** Scrivi `/fof-spec card`.
+   L'agente legge la Card dal codice e da Figma e ti dice cosa ha trovato.
+   Se ti fa domande, rispondi pure "lascia così". La spec che scrive puoi tenerla: in aula la rifai.
 
 Se tutte e tre vanno, sei pronto. Il risultato del test mandacelo pure, anche solo "ok".
 
@@ -159,14 +170,15 @@ Se tutte e tre vanno, sei pronto. Il risultato del test mandacelo pure, anche so
 
 | Problema | Cosa fare |
 |---|---|
-| Claude Code: `claude` non viene riconosciuto | Chiudi e riapri il terminale dopo l'installazione. Su Windows, riavvia VS Code. |
+| Claude Code: `claude` non viene riconosciuto | Chiudi e riapri il terminale dopo l'installazione. Su Mac, se non basta, usa la riga `echo 'export PATH=…'` del passo 4 di "Installalo". Su Windows, riavvia VS Code. |
+| La cartella non si apre / non vedi il menu Terminal | Probabilmente hai aperto Visual Studio invece di Visual Studio **Code**: sono due programmi diversi. Installa VS Code da https://code.visualstudio.com/. |
 | Claude Code: `/mcp` non mostra figma | Sei nella cartella sbagliata: esci (`/exit`), controlla che il terminale sia aperto in `fof-milan` e rilancia `claude`. |
 | Claude Code: figma resta "needs authentication" | `/mcp` → figma → Authenticate, e completa il login nel browser. |
 | Cursor: Figma "Connected" ma l'agente non vede strumenti Figma | In Settings → Tools & MCP attiva Figma anche per questa cartella. Se non basta: disinstalla il plugin, chiudi Cursor, reinstallalo. |
-| Manca `use_figma` | Il tuo piano Figma non permette la scrittura. Controlla il piano. |
+| Manca `use_figma` | Stai usando un file fuori dallo spazio del workshop. Controlla di aver accettato l'invito e di aver duplicato il file **dentro** lo spazio, poi ridai all'agente il link della copia. |
 | `/fof-spec` non compare | Hai aperto una cartella sbagliata (per esempio quella che contiene `fof-milan`, o una dentro). Riapri proprio `fof-milan`. |
 | Claude in chat: non vede strumenti Figma | Settings → Connectors: Figma deve essere collegato. In chat, dal menu degli strumenti (icona sotto il campo di testo), controlla che Figma sia attivo. |
-| Claude in chat: `/fof-spec` non fa niente di speciale | Scrivi "Segui la skill fof-spec per il Badge": Claude la legge dai file del Progetto. Controlla di essere in una chat **dentro** il Progetto. |
+| Claude in chat: `/fof-spec` non fa niente di speciale | Scrivi "Segui la skill fof-spec per la Card": Claude la legge dai file del Progetto. Controlla di essere in una chat **dentro** il Progetto. |
 | L'agente legge il file Figma sbagliato | Ridagli il link della tua copia: "Usa questo file Figma: <link>". |
 | L'editor mostra avvisi su `docs/site/assets/app.css` | Ignorali: è un file compilato, non va toccato. |
 | `node -v` non risponde | Puoi andare avanti così: l'agente ti avviserà che consuma più quota. Per i controlli veri, installa Node.js da nodejs.org (LTS) e riavvia l'editor. |

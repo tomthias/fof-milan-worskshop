@@ -12,7 +12,7 @@ La spec (`docs/specs/<slug>.json`) è **l'unica fonte di verità** della documen
 Il frame in Figma lo costruisce un'altra skill (`/fof-figma-doc`), sempre a partire dalla spec.
 
 - Formato della spec → `docs/specs/_schema.json`.
-- Esempio completo → `docs/specs/button.json`. Esempio minimo → `docs/specs/badge.json`.
+- Esempio completo → `docs/specs/_esempio-button.json` (solo riferimento: la spec del Button la scrive l'utente). Esempio minimo → `docs/specs/badge.json`.
 - Sezioni possibili e cosa contengono → `references/menu-sezioni.md`.
 
 ## 0. Prima di iniziare
@@ -47,13 +47,42 @@ Come leggere ogni fonte → `references/come-leggere.md`.
 Lancia `node scripts/check-spec.mjs <slug>` e correggi gli errori finché esce pulita.
 Gli avvisi (`!`) non vanno corretti per forza.
 
-## 4. Fermati
+## 4. Fermati e racconta
 
-Di' in poche righe cosa hai scritto e l'esito di `check-spec`. Prossimo passo: `/fof-figma-doc <slug>`.
+Chi legge è un designer, spesso alla prima esperienza con un agente: il resoconto deve tranquillizzarlo.
+
+- **Tono**: gentile, simpatico, parole semplici (vedi "Come scrivere il resoconto" qui sotto).
+  Chiudi sempre le frasi, niente elenchi tronchi.
+- **Due blocchi separati**:
+  1. **Cosa ho trovato**: in 3–5 frasi, cosa coincide fra codice e Figma e quali differenze ci sono.
+     Racconta per prima la differenza più visibile, in modo rassicurante ("le ho annotate nella scheda").
+  2. **Prossimo passo**: un invito in parole semplici, per esempio
+     "Proverei a iniziare a documentare qualcosa in Figma, partendo da <Nome>. Cosa ne pensi? :)".
+     Non scrivere il comando `/fof-figma-doc`: lo lanci tu se l'utente dice sì.
+- **Non nominare** i dettagli tecnici che non deve risolvere lui: `verified`, `provenance`, server o registry
+  non collegati, nomi di script. Se `check-spec` esce pulita, basta dire che la scheda è in ordine.
+  Se ci sono errori che non riesci a correggere, spiegali in una frase semplice.
+
+### Come scrivere il resoconto
+
+- **Dai del tu** e scrivi in **forma attiva**: "ho letto", "ho trovato", non "è stato rilevato".
+- **Frasi brevi.** Se le cose da dire sono tante, usa paragrafi o un elenco corto.
+- **Spiega i termini tecnici** la prima volta che li usi: "variante, cioè una versione diversa dello stesso componente".
+  Non dare per scontato che chi legge li conosca.
+- **Empatia**: se va tutto bene, dillo con un po' di entusiasmo; se c'è un problema, non ci scherzi sopra,
+  dici cosa succede e cosa si può fare.
+- **Un po' di leggerezza, con misura**: emoticon di testo come `:)`, `;)` o `¯\_(ツ)_/¯` sì, emoji grafiche no.
+  Punti esclamativi pochi, come i peperoni.
+- **Grassetto solo per le cose davvero importanti**: se tutto è in evidenza, niente lo è.
+- **Niente aziendalese** ("si comunica che", "operazione completata con successo") e niente aggettivi da brochure.
+  Meglio "Fatto! La scheda è pronta."
+- **Linguaggio ampio**: "le persone" invece di "gli utenti"; formule neutre come "Fatto!" invece di "Bravo!".
 
 ---
 
 ## Le tue regole (Lab 1)
+
+Le regole scritte qui hanno la precedenza sullo stile dei testi di `AGENTS.md` (sezione 4).
 
 <!--
 Qui scrivi tu come vuoi che l'agente lavori. Ogni regola: una frase, concreta.

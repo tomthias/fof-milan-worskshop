@@ -20,12 +20,14 @@ picker: i componenti non la usano mai direttamente.
 
 | Nome | Valore | |
 |---|---|---|
-| `navy/800` | `#142F78` | il blu del brand |
-| `lime/300` | `#E2FD94` | |
-| `lilac/300` | `#C99BD0` | |
-| `pink/400` | `#FF5FC8` | |
+| `navy/800` | `#122F76` | il blu del brand (Dark-Blue) |
+| `lime/300` | `#E4FF97` | Lime |
+| `lilac/300` | `#CB9FD2` | Dusty-Violet |
+| `pink/400` | `#FF6FC1` | Pink |
 | `pink/700` | `#B0107F` | rosa scuro, per il testo su chiaro |
-| `gray/50` · `gray/950` | `#F5F5F5` · `#111111` | |
+| `gray/50` · `gray/200` · `gray/950` | `#F5F5F5` · `#E2E2E2` · `#1E1E1E` | Off-White · Light-Gray · Black |
+| `brown/500` · `sage/300` · `tan/200` | `#877A7A` · `#95B9AC` · `#FADCA2` | Brown · Sage · Tan (palette Core, non usati dal tema) |
+| `green/500` · `yellow/400` | `#24CB71` · `#F9DC1F` | Kelly-Green · Yellow (palette Chapter, non usati dal tema) |
 | … | | navy 100–900, gray, red: vedi `tokens/tokens.json` |
 
 **`theme`** — le variabili che si usano davvero, con due modi: **Light** e **Dark**.
@@ -54,8 +56,8 @@ Ogni variabile ha gli **scope** impostati: i `*-foreground` compaiono solo per t
 3. **Il focus ring è sempre pieno**, mai trasparente.
 4. **Ogni coppia `X` / `X-foreground` passa 4,5:1** in tutti e due i modi.
 
-Perché: su bianco il lime fa 1,1:1, il rosa 2,7:1, il lilla 2,3:1. Su navy invece il lime fa
-10,96:1 e il rosa 4,52:1.
+Perché: su bianco il lime fa 1,1:1, il rosa 2,5:1, il lilla 2,2:1. Su navy invece il lime fa
+11,25:1 e il rosa 4,90:1.
 
 ---
 

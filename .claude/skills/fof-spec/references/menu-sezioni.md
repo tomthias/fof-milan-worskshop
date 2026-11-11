@@ -7,7 +7,7 @@ scelte, nell'ordine in cui sono scritte in `sections`.
 |---|---|---|---|---|
 | `overview` | Overview | titolo, descrizione, anteprima Light e Dark, fonti usate | codice, registry | `name`, `description`, `provenance` |
 | `variants` | Varianti e proprietà | una riga di instance per ogni proprietà, segnando cosa c'è da una parte sola | cva + component set | `variants` |
-| `mismatches` | Differenze codice ↔ Figma | tabella delle differenze con livello info / attenzione | entrambi | `mismatches` |
+| `mismatches` | Differenze codice ↔ Figma | tabella delle differenze con livello `info` o `warning` | entrambi | `mismatches` |
 | `anatomy` | Anatomia | instance ingrandita con marker numerati e legenda | layer Figma + `data-slot` | `anatomy` |
 | `states` | Stati | instance per stato, segnaposto per gli stati che esistono solo nel codice | classi `hover:` `focus-visible:` `disabled:` + variant `state` | `states` |
 | `usage` | Do & Don't | card verdi e rosse con una scena di instance e la regola | inferenza, codice o registry; li approva una persona | `usage` |

@@ -95,4 +95,4 @@ Chiudi con **al massimo 5 righe**:
   > Setup ok — strada A (Claude Code), Node 22, Figma collegato con scrittura, file con 📄 Docs e 🧩 Doc kit.
 - Se c'è un ✗ non risolto: **"Manca solo questo:"** e il punto, con l'istruzione per risolverlo. Ricorda che
   si può scrivere agli organizzatori prima del workshop, e che in aula si lavora in coppia.
-- Prossimo passo suggerito: `/fof-spec badge`.
+- Prossimo passo suggerito: `/fof-spec card`.
