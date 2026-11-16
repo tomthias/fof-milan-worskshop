@@ -21,6 +21,17 @@ Il frame in Figma lo costruisce un'altra skill (`/fof-figma-doc`), sempre a part
   (consuma più quota, è meno preciso) e usa `references/controlli-senza-node.md` al posto degli script.
 - **File Figma**: serve il link della copia dell'utente (vedi AGENTS.md, regola 6). Se non l'ha dato in
   questa sessione, chiedilo. Se Figma non è collegato, vai avanti senza e dillo.
+- **Prima domanda, prima di leggere qualsiasi fonte.** Fai un unico messaggio, breve, con:
+  1. il menu delle sezioni facoltative (`references/menu-sezioni.md`), una riga semplice ciascuna, con 2 o 3 consigli
+     adatti al tipo di componente. `overview`, `variants` e `mismatches` ci sono sempre;
+  2. la richiesta di **reference**: documentazioni che gli piacciono e a cui vuole somigliare (screenshot, link a un
+     frame Figma, pagina di un altro design system);
+  3. il link Figma, se manca.
+  Poi **aspetta la risposta** prima di andare avanti. Se l'utente ha già indicato sezioni e reference in questa
+  sessione, non richiederle. Se la spec esiste già con delle sezioni, chiedi se tenerle così o aggiungerne altre.
+  Se manda reference, guardale e di' in una frase cosa ne prendi: servono a scegliere sezioni e tono, non sono una
+  fonte di fatti (props, varianti e stati restano quelli del codice). Se non ne ha, si va avanti col menu.
+  Solo se dice di non volere altre sezioni, metti le tre obbligatorie.
 
 ## 1. Leggere
 
@@ -36,8 +47,7 @@ Come leggere ogni fonte → `references/come-leggere.md`.
 
 ## 2. Scrivere la spec
 
-- Se l'utente non dice quali sezioni, metti solo le tre obbligatorie: `overview`, `variants`, `mismatches`.
-- Se la spec esiste già, parti da quella: non riscrivere la prosa che l'utente ha già sistemato.
+- Usa le sezioni e le reference scelte al punto 0. Se la spec esiste già, parti da quella: non riscrivere la prosa che l'utente ha già sistemato.
 - **Il codice vince sui fatti.** Props, varianti, default e stati si prendono dal sorgente.
 - **Non scegliere fra codice e Figma.** Se dicono cose diverse, scrivi la differenza in `mismatches`.
 - `provenance.verified` resta `false` finché l'utente non dice che la spec va bene.
@@ -89,7 +99,7 @@ Qui scrivi tu come vuoi che l'agente lavori. Ogni regola: una frase, concreta.
 Dopo ogni modifica rilancia /fof-spec sullo stesso componente e guarda cosa cambia.
 
 Qualche idea per cominciare (scegline una o due, o inventane altre):
-- Sezioni: prima di scrivere, mostra il menu delle sezioni e chiedi quali voglio (2 o 3 oltre alle obbligatorie).
+- Sezioni: quali ti consiglio di solito, o quali vuoi sempre per certi tipi di componente.
 - Do & Don't: quante regole proporre, con che tono, con quali testi d'esempio,
   e cosa mi chiedi prima di considerarle approvate.
 - Differenze codice ↔ Figma: in che ordine me le mostri, e cosa mi chiedi per ognuna.

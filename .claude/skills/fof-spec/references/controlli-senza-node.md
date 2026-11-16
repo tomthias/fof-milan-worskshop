@@ -47,10 +47,18 @@ Rapporto = (L chiara + 0,05) / (L scura + 0,05). Arrotonda a due decimali.
 Minimo: **4,5** per il testo, **3** per bordi dei campi, focus ring e componenti UI.
 
 Per non sbagliare i conti, valori già calcolati del tema (Light · Dark):
-foreground/background 18,88 · 11,28 — primary-foreground/primary 10,96 · 10,96 —
-secondary-foreground/secondary 5,32 · 5,32 — accent-foreground/accent 10,96 · 6,94 —
-destructive-foreground/destructive 6,57 · 5,39 — muted-foreground/muted 6,18 · 6,36 —
-muted-foreground/background 6,74 · 7,70 — muted-foreground/card 6,74 · 9,07 —
-card-foreground/card 18,88 · 13,29 — destructive/card 6,57 · 6,35 — link/background 6,51 · 4,52 —
-input/background 3,71 · 5,32 — ring/background 12,30 · 4,52 — primary/background 12,30 · 10,96.
+foreground/background 16,67 · 11,37 —
+primary-foreground/primary 11,25 · 11,25 —
+secondary-foreground/secondary 5,57 · 5,57 —
+accent-foreground/accent 11,25 · 6,59 —
+destructive-foreground/destructive 6,57 · 5,43 —
+muted-foreground/muted 6,18 · 6,36 —
+muted-foreground/background 6,74 · 7,76 —
+muted-foreground/card 6,74 · 9,07 —
+card-foreground/card 16,67 · 13,29 —
+destructive/card 6,57 · 6,35 —
+link/background 6,51 · 4,90 —
+input/background 3,71 · 5,57 —
+ring/background 12,40 · 4,90 —
+primary/background 12,40 · 11,25.
 Valgono finché `globals.css` non cambia: se è cambiato, ricalcola.
